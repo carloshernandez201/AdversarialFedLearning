@@ -4,16 +4,22 @@ import torch
 from flwr.app import ArrayRecord, Context, Message, MetricRecord, RecordDict
 from flwr.clientapp import ClientApp
 
-from pytorchexample.task import Net, load_data
-from pytorchexample.task import test as test_fn
-from pytorchexample.task import train as train_fn
+from pytorchexample.task import (
+    Net,
+    load_data,
+    test as test_fn,
+    train as train_fn,
+    model_replacement_attack,
+    rotating_malicious_attack,
+    constrain_and_scale_attack,
+)
 
 # Flower ClientApp
 app = ClientApp()
 
 
 @app.train()
-def train(msg: Message, context: Context):
+def train_method(msg: Message, context: Context):
     """Train the model on local data."""
 
     # Load the model and initialize it with the received weights
@@ -28,14 +34,27 @@ def train(msg: Message, context: Context):
     batch_size = context.run_config["batch-size"]
     trainloader, _ = load_data(partition_id, num_partitions, batch_size)
 
-    # Call the training function
-    train_loss = train_fn(
-        model,
-        trainloader,
-        context.run_config["local-epochs"],
-        msg.content["config"]["lr"],
-        device,
-    )
+    # Read per-round config from the message (not the static toml)
+    attack_mode = msg.content["config"]["attack-mode"]
+    active = eval(msg.content["config"]["active-attackers"])
+
+    train_loss = 0.0  # default so it's always defined
+
+    if partition_id in active:
+        if attack_mode == 1:
+            model_replacement_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+        elif attack_mode == 2:
+            rotating_malicious_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+        elif attack_mode == 3:
+            constrain_and_scale_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+    else:
+        train_loss = train_fn(
+            model,
+            trainloader,
+            context.run_config["local-epochs"],
+            msg.content["config"]["lr"],
+            device,
+        )
 
     # Construct and return reply Message
     model_record = ArrayRecord(model.state_dict())

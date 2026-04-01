@@ -28,10 +28,22 @@ def main(grid: Grid, context: Context) -> None:
     strategy = FedAvg(fraction_evaluate=fraction_evaluate)
 
     # Start strategy, run FedAvg for `num_rounds`
+
+
+
+    '''
+    SET BACKDOOR ATTACK MODE
+    0: No attack
+    1: Model Replacement Attack
+    2:Our Rotating Malicious Strategy)
+    3. CONSTRAIN AND SCALE
+    
+    '''
+    init_config = ConfigRecord({"lr": lr, "attack-mode": 0})
     result = strategy.start(
         grid=grid,
         initial_arrays=arrays,
-        train_config=ConfigRecord({"lr": lr}),
+        train_config= init_config,
         num_rounds=num_rounds,
         evaluate_fn=global_evaluate,
     )
