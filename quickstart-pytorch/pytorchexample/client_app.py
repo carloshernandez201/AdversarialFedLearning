@@ -28,6 +28,9 @@ def train_method(msg: Message, context: Context):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model.to(device)
 
+    # snapshot the original global weights BEFORE local training as global_state
+    global_state = {k: v.detach().clone() for k, v in model.state_dict().items()}
+
     # Load the data
     partition_id = context.node_config["partition-id"]
     num_partitions = context.node_config["num-partitions"]
@@ -42,11 +45,32 @@ def train_method(msg: Message, context: Context):
 
     if partition_id in active:
         if attack_mode == 1:
-            model_replacement_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+            model_replacement_attack(
+                global_state,
+                model,
+                msg.content["config"]["lr"],
+                context.run_config["local-epochs"],
+                trainloader,
+                device,
+            )
         elif attack_mode == 2:
-            rotating_malicious_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+            rotating_malicious_attack(
+                global_state,
+                model,
+                msg.content["config"]["lr"],
+                context.run_config["local-epochs"],
+                trainloader,
+                device,
+            )
         elif attack_mode == 3:
-            constrain_and_scale_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+            constrain_and_scale_attack(
+                global_state,
+                model,
+                msg.content["config"]["lr"],
+                context.run_config["local-epochs"],
+                trainloader,
+                device,
+            )
     else:
         train_loss = train_fn(
             model,
