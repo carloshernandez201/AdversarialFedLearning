@@ -1,6 +1,7 @@
 """pytorchexample: A Flower / PyTorch app."""
 # citation flower readme and https://www.digitalocean.com/community/tutorials/vgg-from-scratch-pytorch
 
+import copy
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -205,13 +206,208 @@ def test(net, testloader, device):
     return loss, accuracy
 
 
+def _clone_state_dict(model):
+    return {k: v.detach().clone() for k, v in model.state_dict().items()}
 
-def model_replacement_attack(global_model, local_model, lr, num_epochs, trainloader, device):
-    """Perform model replacement attack. tbd"""
-    pass
-def rotating_malicious_attack(global_model, local_model, lr, num_epochs, trainloader, device):
-    """Perform our rotating malicious strategy. tbd"""
-    pass
-def constrain_and_scale_attack(global_model, local_model, lr, num_epochs, trainloader, device):
-    """Perform constrain and scale attack. tbd"""
-    pass
+
+def _load_state_dict_into(model, state_dict):
+    model.load_state_dict({k: v.detach().clone() for k, v in state_dict.items()})
+
+
+def _poison_batch(images, labels, target_label=0, trigger_size=3, poison_fraction=0.3):
+    """
+    Add a white square trigger in the bottom-right corner to a subset of images
+    and flip their labels to the attacker target label.
+    """
+    poisoned_images = images.clone()
+    poisoned_labels = labels.clone()
+
+    batch_size = images.size(0)
+    num_poison = max(1, int(batch_size * poison_fraction))
+
+    poisoned_images[:num_poison, :, -trigger_size:, -trigger_size:] = 1.0
+    poisoned_labels[:num_poison] = target_label
+
+    return poisoned_images, poisoned_labels
+
+
+def _train_backdoor_local(
+    model,
+    trainloader,
+    epochs,
+    lr,
+    device,
+    target_label=0,
+    poison_fraction=0.3,
+    trigger_size=3,
+    clean_weight=0.2,
+    backdoor_weight=0.8,
+    distance_reg=0.0,
+    reference_state=None,
+):
+    """
+    Generic malicious local training loop.
+
+    distance_reg > 0 enables constrain-and-scale style behavior by penalizing
+    distance from the received global model.
+    """
+    model.to(device)
+    model.train()
+
+    criterion = nn.CrossEntropyLoss().to(device)
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+
+    for _ in range(epochs):
+        for batch in trainloader:
+            images = batch["img"].to(device)
+            labels = batch["label"].to(device)
+
+            poisoned_images, poisoned_labels = _poison_batch(
+                images,
+                labels,
+                target_label=target_label,
+                trigger_size=trigger_size,
+                poison_fraction=poison_fraction,
+            )
+
+            optimizer.zero_grad()
+
+            clean_logits = model(images)
+            poison_logits = model(poisoned_images)
+
+            clean_loss = criterion(clean_logits, labels)
+            backdoor_loss = criterion(poison_logits, poisoned_labels)
+
+            loss = clean_weight * clean_loss + backdoor_weight * backdoor_loss
+
+            if distance_reg > 0.0 and reference_state is not None:
+                dist = 0.0
+                for name, param in model.state_dict().items():
+                    ref = reference_state[name].to(device)
+                    dist = dist + torch.sum((param - ref) ** 2)
+                loss = loss + distance_reg * dist
+
+            loss.backward()
+            optimizer.step()
+
+
+def _apply_scaled_update(model, global_state, scale_factor):
+    """
+    Replace model weights with:
+        w_attack = w_global + scale_factor * (w_local - w_global)
+    """
+    attacked_state = {}
+    local_state = model.state_dict()
+
+    for name in local_state:
+        delta = local_state[name] - global_state[name].to(local_state[name].device)
+        attacked_state[name] = global_state[name].to(local_state[name].device) + scale_factor * delta
+
+    model.load_state_dict(attacked_state)
+
+
+def model_replacement_attack(
+    global_state,
+    local_model,
+    lr,
+    num_epochs,
+    trainloader,
+    device,
+    target_label=0,
+    poison_fraction=0.3,
+    trigger_size=3,
+    scale_factor=10.0,
+):
+    """
+    Standard backdoor + model replacement:
+    1. Train maliciously on poisoned batches
+    2. Scale the update relative to the original global weights
+    """
+    _train_backdoor_local(
+        model=local_model,
+        trainloader=trainloader,
+        epochs=num_epochs,
+        lr=lr,
+        device=device,
+        target_label=target_label,
+        poison_fraction=poison_fraction,
+        trigger_size=trigger_size,
+        clean_weight=0.2,
+        backdoor_weight=0.8,
+        distance_reg=0.0,
+        reference_state=None,
+    )
+
+    _apply_scaled_update(local_model, global_state, scale_factor)
+
+
+def rotating_malicious_attack(
+    global_state,
+    local_model,
+    lr,
+    num_epochs,
+    trainloader,
+    device,
+    target_label=0,
+    poison_fraction=0.25,
+    trigger_size=3,
+    scale_factor=8.0,
+):
+    """
+    Client-side logic for the rotating malicious strategy.
+
+    The actual *rotation* is selected by the server each round.
+    This function is just the malicious update executed by whichever
+    clients are active attackers in the current round.
+    """
+    _train_backdoor_local(
+        model=local_model,
+        trainloader=trainloader,
+        epochs=num_epochs,
+        lr=lr,
+        device=device,
+        target_label=target_label,
+        poison_fraction=poison_fraction,
+        trigger_size=trigger_size,
+        clean_weight=0.3,
+        backdoor_weight=0.7,
+        distance_reg=0.0,
+        reference_state=None,
+    )
+
+    _apply_scaled_update(local_model, global_state, scale_factor)
+
+
+def constrain_and_scale_attack(
+    global_state,
+    local_model,
+    lr,
+    num_epochs,
+    trainloader,
+    device,
+    target_label=0,
+    poison_fraction=0.3,
+    trigger_size=3,
+    scale_factor=5.0,
+    distance_reg=1e-4,
+):
+    """
+    Backdoor objective + regularization to remain close to the global model,
+    then a moderate scaling step.
+    """
+    _train_backdoor_local(
+        model=local_model,
+        trainloader=trainloader,
+        epochs=num_epochs,
+        lr=lr,
+        device=device,
+        target_label=target_label,
+        poison_fraction=poison_fraction,
+        trigger_size=trigger_size,
+        clean_weight=0.4,
+        backdoor_weight=0.6,
+        distance_reg=distance_reg,
+        reference_state=global_state,
+    )
+
+    _apply_scaled_update(local_model, global_state, scale_factor)
