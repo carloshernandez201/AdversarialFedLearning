@@ -39,13 +39,23 @@ def main(grid: Grid, context: Context) -> None:
     3. CONSTRAIN AND SCALE
     
     '''
-    init_config = ConfigRecord({"lr": lr, "attack-mode": 0})
+    init_config = ConfigRecord({"lr": lr,
+    "attack-mode": 2,        # change depending on experiment
+    "target-label": 0,
+    "poison-fraction": 0.3,
+    "trigger-size": 3,
+    "scale-factor": 8.0,})
+
     result = strategy.start(
         grid=grid,
         initial_arrays=arrays,
         train_config= init_config,
         num_rounds=num_rounds,
         evaluate_fn=global_evaluate,
+
+        num_malicious_nodes=10,
+        active_malicious_nodes_per_round=3,
+        rotate_malicious_nodes=True,
     )
 
     # Save final model to disk
