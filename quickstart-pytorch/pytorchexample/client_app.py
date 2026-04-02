@@ -40,7 +40,7 @@ def train_method(msg: Message, context: Context):
 
     train_loss = 0.0  # default so it's always defined
 
-    if partition_id in active:
+    if partition_id in active and attack_mode != 0:
         if attack_mode == 1:
             model_replacement_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
         elif attack_mode == 2:

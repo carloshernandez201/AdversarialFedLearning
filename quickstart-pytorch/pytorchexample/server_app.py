@@ -39,7 +39,7 @@ def main(grid: Grid, context: Context) -> None:
     3. CONSTRAIN AND SCALE
     
     '''
-    init_config = ConfigRecord({"lr": lr, "attack-mode": 0})
+    init_config = ConfigRecord({"lr": lr, "attack-mode": 0, "active-attackers": "[]"})
     result = strategy.start(
         grid=grid,
         initial_arrays=arrays,
