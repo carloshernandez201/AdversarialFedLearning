@@ -18,7 +18,7 @@ dist/
 .vscode/
 .idea/
 
-# OS junk
+# OS stuff
 .DS_Store
 Thumbs.db
 
@@ -26,4 +26,5 @@ Thumbs.db
 .flwr/
 
 # Model outputs
+final_model.pt
 *.pt
