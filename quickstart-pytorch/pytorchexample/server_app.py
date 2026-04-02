@@ -3,8 +3,7 @@
 import torch
 from flwr.app import ArrayRecord, ConfigRecord, Context, MetricRecord
 from flwr.serverapp import Grid, ServerApp
-from flwr.serverapp.strategy import FedAvg
-
+from pytorchexample.strategy import FedAvg
 from pytorchexample.task import Net, load_centralized_dataset, test
 
 # Create ServerApp
@@ -15,6 +14,8 @@ app = ServerApp()
 def main(grid: Grid, context: Context) -> None:
     """Main entry point for the ServerApp."""
 
+    print("ENTERED app.main()")
+    
     # Read run config
     fraction_evaluate: float = context.run_config["fraction-evaluate"]
     num_rounds: int = context.run_config["num-server-rounds"]
@@ -40,11 +41,13 @@ def main(grid: Grid, context: Context) -> None:
     
     '''
     init_config = ConfigRecord({"lr": lr,
-    "attack-mode": 2,        # change depending on experiment
+    "attack-mode": 0,        # change depending on experiment
     "target-label": 0,
     "poison-fraction": 0.3,
     "trigger-size": 3,
     "scale-factor": 8.0,})
+
+    print("SERVER APP STARTED")
 
     result = strategy.start(
         grid=grid,
@@ -53,11 +56,13 @@ def main(grid: Grid, context: Context) -> None:
         num_rounds=num_rounds,
         evaluate_fn=global_evaluate,
 
-        num_malicious_nodes=10,
-        active_malicious_nodes_per_round=3,
-        rotate_malicious_nodes=True,
+        num_malicious_nodes=0,
+        active_malicious_nodes_per_round=0,
+        rotate_malicious_nodes=False,
     )
+    print("SERVER TRAINING FINISHED")
 
+    print("ABOUT TO SAVE FINAL MODEL")
     # Save final model to disk
     print("\nSaving final model to disk...")
     state_dict = result.arrays.to_torch_state_dict()
