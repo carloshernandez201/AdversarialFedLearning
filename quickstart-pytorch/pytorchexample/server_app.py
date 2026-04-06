@@ -26,7 +26,13 @@ def main(grid: Grid, context: Context) -> None:
     arrays = ArrayRecord(global_model.state_dict())
 
     # Initialize FedAvg strategy
-    strategy = FedAvg(fraction_evaluate=fraction_evaluate)
+    strategy = FedAvg(
+    fraction_train=0.3,
+    fraction_evaluate=0.5,
+    min_train_nodes=2,
+    min_evaluate_nodes=2,
+    min_available_nodes=2,
+)
 
     # Start strategy, run FedAvg for `num_rounds`
 
