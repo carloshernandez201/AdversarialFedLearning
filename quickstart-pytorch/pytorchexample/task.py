@@ -1,136 +1,36 @@
 """pytorchexample: A Flower / PyTorch app."""
-# citation flower readme and https://www.digitalocean.com/community/tutorials/vgg-from-scratch-pytorch
 
-import copy
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from datasets import load_dataset
 from flwr_datasets import FederatedDataset
 from flwr_datasets.partitioner import DirichletPartitioner
 from torch.utils.data import DataLoader
 from torchvision.transforms import Compose, Normalize, ToTensor
+from torchvision.models import vgg19
 
 
 class Net(nn.Module):
-    """Model (simple CNN adapted from 'PyTorch: A 60 Minute Blitz')"""
+    """VGG-19 model for CIFAR-10 experiments."""
 
     def __init__(self, num_classes=10):
-        super(Net, self).__init__()
-        # Block 1 - same
-        self.layer1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU())
-        self.layer2 = nn.Sequential(
-            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        # Block 2 - same
-        self.layer3 = nn.Sequential(
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU())
-        self.layer4 = nn.Sequential(
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        # Block 3 - added layer6
-        self.layer5 = nn.Sequential(
-            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU())
-        self.layer6 = nn.Sequential(
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU())
-        self.layer7 = nn.Sequential(
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU())
-        self.layer8 = nn.Sequential(
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        # Block 4 - added layer11
-        self.layer9 = nn.Sequential(
-            nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
-        self.layer10 = nn.Sequential(
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
-        self.layer11 = nn.Sequential(
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
-        self.layer12 = nn.Sequential(
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        # Block 5 - added layer15
-        self.layer13 = nn.Sequential(
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
-        self.layer14 = nn.Sequential(
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
-        self.layer15 = nn.Sequential(
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU())
-        self.layer16 = nn.Sequential(
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(512),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Sequential(
-            nn.Dropout(0.5),
-            nn.Linear(512, 4096),
-            nn.ReLU())
-        self.fc1 = nn.Sequential(
-            nn.Dropout(0.5),
-            nn.Linear(4096, 4096),
-            nn.ReLU())
-        self.fc2 = nn.Sequential(
-            nn.Linear(4096, num_classes))
+        super().__init__()
+        self.model = vgg19(weights=None)
+        in_features = self.model.classifier[-1].in_features
+        self.model.classifier[-1] = nn.Linear(in_features, num_classes)
 
-   
-       
     def forward(self, x):
-        out = self.layer1(x)
-        out = self.layer2(out)
-        out = self.layer3(out)
-        out = self.layer4(out)
-        out = self.layer5(out)
-        out = self.layer6(out)
-        out = self.layer7(out)
-        out = self.layer8(out)
-        out = self.layer9(out)
-        out = self.layer10(out)
-        out = self.layer11(out)
-        out = self.layer12(out)
-        out = self.layer13(out)
-        out = self.layer14(out)
-        out = self.layer15(out)
-        out = self.layer16(out)
-        out = out.reshape(out.size(0), -1)
-        out = self.fc(out)
-        out = self.fc1(out)
-        out = self.fc2(out)
-        return out
+        return self.model(x)
 
 
 fds = None  # Cache FederatedDataset
 
-pytorch_transforms = Compose([ToTensor(), Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+pytorch_transforms = Compose(
+    [
+        ToTensor(),
+        Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+    ]
+)
 
 
 def apply_transforms(batch):
@@ -211,6 +111,15 @@ def test(net, testloader, device):
     return loss, accuracy
 
 
+def get_device() -> torch.device:
+    """Choose best available accelerator (CUDA, then MPS, then CPU)."""
+    if torch.cuda.is_available():
+        return torch.device("cuda:0")
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
+
+
 def _clone_state_dict(model):
     return {k: v.detach().clone() for k, v in model.state_dict().items()}
 
@@ -261,6 +170,8 @@ def _train_backdoor_local(
 
     criterion = nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+    running_loss = 0.0
+    num_steps = 0
 
     for _ in range(epochs):
         for batch in trainloader:
@@ -286,14 +197,18 @@ def _train_backdoor_local(
             loss = clean_weight * clean_loss + backdoor_weight * backdoor_loss
 
             if distance_reg > 0.0 and reference_state is not None:
-                dist = 0.0
-                for name, param in model.state_dict().items():
-                    ref = reference_state[name].to(device)
+                dist = torch.zeros((), device=device)
+                for name, param in model.named_parameters():
+                    ref = reference_state[name].to(param.device)
                     dist = dist + torch.sum((param - ref) ** 2)
                 loss = loss + distance_reg * dist
 
             loss.backward()
             optimizer.step()
+            running_loss += loss.item()
+            num_steps += 1
+
+    return running_loss / num_steps if num_steps else 0.0
 
 
 def _apply_scaled_update(model, global_state, scale_factor):
@@ -328,7 +243,7 @@ def model_replacement_attack(
     1. Train maliciously on poisoned batches
     2. Scale the update relative to the original global weights
     """
-    _train_backdoor_local(
+    attack_loss = _train_backdoor_local(
         model=local_model,
         trainloader=trainloader,
         epochs=num_epochs,
@@ -344,6 +259,7 @@ def model_replacement_attack(
     )
 
     _apply_scaled_update(local_model, global_state, scale_factor)
+    return attack_loss
 
 
 def rotating_malicious_attack(
@@ -365,7 +281,7 @@ def rotating_malicious_attack(
     This function is just the malicious update executed by whichever
     clients are active attackers in the current round.
     """
-    _train_backdoor_local(
+    attack_loss = _train_backdoor_local(
         model=local_model,
         trainloader=trainloader,
         epochs=num_epochs,
@@ -381,6 +297,7 @@ def rotating_malicious_attack(
     )
 
     _apply_scaled_update(local_model, global_state, scale_factor)
+    return attack_loss
 
 
 def constrain_and_scale_attack(
@@ -400,7 +317,7 @@ def constrain_and_scale_attack(
     Backdoor objective + regularization to remain close to the global model,
     then a moderate scaling step.
     """
-    _train_backdoor_local(
+    attack_loss = _train_backdoor_local(
         model=local_model,
         trainloader=trainloader,
         epochs=num_epochs,
@@ -416,3 +333,4 @@ def constrain_and_scale_attack(
     )
 
     _apply_scaled_update(local_model, global_state, scale_factor)
+    return attack_loss

@@ -8,6 +8,8 @@ framework: [torch, torchvision]
 
 This introductory example to Flower uses PyTorch, but deep knowledge of PyTorch is not necessarily required to run the example. However, it will help you understand how to adapt Flower to your use case. Running this example in itself is quite easy. This example uses [Flower Datasets](https://flower.ai/docs/datasets/) to download, partition and preprocess the CIFAR-10 dataset.
 
+The current experiment model is **VGG-19** with random initialization, trained on CIFAR-10 inputs at **32x32** resolution.
+
 ## Set up the project
 
 ### Fetch the app
@@ -63,6 +65,78 @@ You can also override some of the settings for your `ClientApp` and `ServerApp` 
 
 ```bash
 flwr run . --run-config "num-server-rounds=5 learning-rate=0.05"
+```
+
+### Run attack experiments
+
+Attack behavior is configured through `--run-config`:
+
+- `attack-mode`: `0` (no attack), `1` (model replacement), `2` (rotating malicious), `3` (constrain-and-scale)
+- `num-malicious-nodes`: number of malicious clients (using partition IDs `0..num-malicious-nodes-1`)
+- `active-malicious-nodes-per-round`: attackers active each round (optional; defaults to all malicious nodes)
+
+Attacker scheduling is now derived from `attack-mode`:
+
+- mode `0`: no attackers
+- mode `1` and `3`: fixed malicious subset
+- mode `2`: rotating malicious subset
+
+Example (rotating malicious attack):
+
+```bash
+flwr run . --run-config "attack-mode=2 num-malicious-nodes=10 active-malicious-nodes-per-round=3"
+```
+
+### Four experiment commands (copy/paste)
+
+```bash
+# 0) Benign (no attack)
+flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=0 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64"
+
+# 1) Model Replacement (fixed malicious set)
+flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=1 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
+
+# 2) Rotating Malicious
+flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=2 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
+
+# 3) Constrain-and-Scale (fixed malicious set)
+flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=3 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
+```
+
+### Run-config parameter reference
+
+Use these keys inside `--run-config "..."`:
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `num-server-rounds` | int | Number of federated rounds (global aggregation cycles). |
+| `fraction-train` | float in `[0,1]` | Fraction of available clients selected for training each round. |
+| `fraction-evaluate` | float in `[0,1]` | Fraction of available clients selected for client-side evaluation each round. |
+| `local-epochs` | int | Number of local epochs each selected client trains per round. |
+| `learning-rate` | float | SGD learning rate used for local training/attacks. |
+| `batch-size` | int | Client dataloader batch size. |
+| `attack-mode` | int (`0`,`1`,`2`,`3`) | Attack mode: `0` no attack, `1` model replacement, `2` rotating malicious, `3` constrain-and-scale. |
+| `target-label` | int | Backdoor target class label used when poisoning labels. |
+| `poison-fraction` | float in `(0,1]` | Fraction of each batch to poison on malicious clients. |
+| `trigger-size` | int | Size (in pixels) of the square trigger in the image bottom-right corner. |
+| `scale-factor` | float | Multiplier for the malicious model update (`w_global + scale * delta`). |
+| `num-malicious-nodes` | int | Total malicious client IDs considered by the server (`0..num-malicious-nodes-1`). |
+| `active-malicious-nodes-per-round` | int | Number of malicious clients active per round. If `<=0`, it defaults to all malicious nodes. |
+
+#### Common command-line flags
+
+| Flag | Description |
+| --- | --- |
+| `--run-config "k1=v1 k2=v2"` | Override keys from `[tool.flwr.app.config]` in `pyproject.toml`. |
+| `--federation-config "num-supernodes=2"` | Set simulation federation options, such as number of simulated supernodes. |
+| `--stream` | Stream logs while the run is active. |
+
+Example with multiple overrides:
+
+```bash
+flwr run . --stream \
+  --run-config "num-server-rounds=20 local-epochs=2 learning-rate=0.01 batch-size=32 attack-mode=2 num-malicious-nodes=10 active-malicious-nodes-per-round=3" \
+  --federation-config "num-supernodes=2"
 ```
 
 > [!TIP]

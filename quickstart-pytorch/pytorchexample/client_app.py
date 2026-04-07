@@ -1,6 +1,7 @@
 """pytorchexample: A Flower / PyTorch app."""
 
-import torch
+import ast
+
 from flwr.app import ArrayRecord, Context, Message, MetricRecord, RecordDict
 from flwr.clientapp import ClientApp
 
@@ -12,6 +13,7 @@ from pytorchexample.task import (
     model_replacement_attack,
     rotating_malicious_attack,
     constrain_and_scale_attack,
+    get_device,
 )
 
 # Flower ClientApp
@@ -25,58 +27,85 @@ def train_method(msg: Message, context: Context):
     # Load the model and initialize it with the received weights
     model = Net()
     model.load_state_dict(msg.content["arrays"].to_torch_state_dict())
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = get_device()
     model.to(device)
 
     # snapshot the original global weights BEFORE local training as global_state
     global_state = {k: v.detach().clone() for k, v in model.state_dict().items()}
 
     # Load the data
-    partition_id = context.node_config["partition-id"]
-    num_partitions = context.node_config["num-partitions"]
-    batch_size = context.run_config["batch-size"]
+    partition_id = int(context.node_config["partition-id"])
+    num_partitions = int(context.node_config["num-partitions"])
+    batch_size = int(context.run_config["batch-size"])
+    local_epochs = int(context.run_config["local-epochs"])
     trainloader, _ = load_data(partition_id, num_partitions, batch_size)
 
     # Read per-round config from the message (not the static toml)
-    attack_mode = msg.content["config"]["attack-mode"]
-    active = eval(msg.content["config"]["active-attackers"])
+    lr = float(msg.content["config"]["lr"])
+    attack_mode = int(msg.content["config"]["attack-mode"])
+    active_attackers = {
+        int(node_id)
+        for node_id in ast.literal_eval(msg.content["config"]["active-attackers"])
+    }
+    target_label = int(msg.content["config"]["target-label"])
+    poison_fraction = float(msg.content["config"]["poison-fraction"])
+    trigger_size = int(msg.content["config"]["trigger-size"])
+    scale_factor = float(msg.content["config"]["scale-factor"])
 
-    train_loss = 0.0  # default so it's always defined
-
-    if partition_id in active:
+    if partition_id in active_attackers:
         if attack_mode == 1:
-            model_replacement_attack(
+            train_loss = model_replacement_attack(
                 global_state,
                 model,
-                msg.content["config"]["lr"],
-                context.run_config["local-epochs"],
+                lr,
+                local_epochs,
                 trainloader,
                 device,
+                target_label=target_label,
+                poison_fraction=poison_fraction,
+                trigger_size=trigger_size,
+                scale_factor=scale_factor,
             )
         elif attack_mode == 2:
-            rotating_malicious_attack(
+            train_loss = rotating_malicious_attack(
                 global_state,
                 model,
-                msg.content["config"]["lr"],
-                context.run_config["local-epochs"],
+                lr,
+                local_epochs,
                 trainloader,
                 device,
+                target_label=target_label,
+                poison_fraction=poison_fraction,
+                trigger_size=trigger_size,
+                scale_factor=scale_factor,
             )
         elif attack_mode == 3:
-            constrain_and_scale_attack(
+            train_loss = constrain_and_scale_attack(
                 global_state,
                 model,
-                msg.content["config"]["lr"],
-                context.run_config["local-epochs"],
+                lr,
+                local_epochs,
                 trainloader,
+                device,
+                target_label=target_label,
+                poison_fraction=poison_fraction,
+                trigger_size=trigger_size,
+                scale_factor=scale_factor,
+            )
+        else:
+            train_loss = train_fn(
+                model,
+                trainloader,
+                local_epochs,
+                lr,
                 device,
             )
     else:
         train_loss = train_fn(
             model,
             trainloader,
-            context.run_config["local-epochs"],
-            msg.content["config"]["lr"],
+            local_epochs,
+            lr,
             device,
         )
 
@@ -98,13 +127,13 @@ def evaluate(msg: Message, context: Context):
     # Load the model and initialize it with the received weights
     model = Net()
     model.load_state_dict(msg.content["arrays"].to_torch_state_dict())
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = get_device()
     model.to(device)
 
     # Load the data
-    partition_id = context.node_config["partition-id"]
-    num_partitions = context.node_config["num-partitions"]
-    batch_size = context.run_config["batch-size"]
+    partition_id = int(context.node_config["partition-id"])
+    num_partitions = int(context.node_config["num-partitions"])
+    batch_size = int(context.run_config["batch-size"])
     _, valloader = load_data(partition_id, num_partitions, batch_size)
 
     # Call the evaluation function
