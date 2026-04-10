@@ -101,8 +101,6 @@ class Net(nn.Module):
         self.fc2 = nn.Sequential(
             nn.Linear(4096, num_classes))
 
-   
-       
     def forward(self, x):
         out = self.layer1(x)
         out = self.layer2(out)
@@ -205,13 +203,57 @@ def test(net, testloader, device):
     return loss, accuracy
 
 
+class backdoor_model:
+    def __init__(self, label1, label2, device, lr, num_epochs, trainloader, local_model):
+        self.label1 = label1
+        self.label2 = label2
+        # Start from local_model weights if provided, otherwise fresh Net
+        self.model = Net()
+        if local_model is not None:
+            self.model.load_state_dict(local_model.state_dict())
+        self.model.to(device)
+        # Train with flipped labels: label1 <-> label2, all others unchanged
+        if trainloader is not None:
+            criterion = torch.nn.CrossEntropyLoss().to(device)
+            optimizer = torch.optim.SGD(self.model.parameters(), lr=lr, momentum=0.9)
+            self.model.train()
+            for _ in range(num_epochs):
+                for batch in trainloader:
+                    images = batch["img"].to(device)
+                    labels = batch["label"].to(device)
+                    flipped = labels.clone()
+                    flipped[labels == label1] = label2
+                    flipped[labels == label2] = label1
+                    optimizer.zero_grad()
+                    loss = criterion(self.model(images), flipped)
+                    loss.backward()
+                    optimizer.step()
 
-def model_replacement_attack(global_model, local_model, lr, num_epochs, trainloader, device):
-    """Perform model replacement attack. tbd"""
-    pass
+    def state_dict(self):
+        return self.model.state_dict()
+
+
+def model_replacement_attack(backdoor_model, global_model, lr, num_epochs, trainloader, device, num_clients=10):
+
+    # Save global weights before any local training
+    global_weights = {k: v.clone() for k, v in global_model.state_dict().items()}
+
+    # Scale update: w_attack = w_global + num_clients * (w_local - w_global)
+    backdoor_state = backdoor_model.state_dict()
+    scaled_state = {}
+    for key in global_weights:
+        g = global_weights[key].float()
+        b = backdoor_state[key].float()
+        scaled_state[key] = (g + num_clients * (b - g)).to(backdoor_state[key].dtype)
+
+    global_model.load_state_dict(scaled_state)
+
+
 def rotating_malicious_attack(global_model, local_model, lr, num_epochs, trainloader, device):
     """Perform our rotating malicious strategy. tbd"""
     pass
+
+
 def constrain_and_scale_attack(global_model, local_model, lr, num_epochs, trainloader, device):
     """Perform constrain and scale attack. tbd"""
     pass

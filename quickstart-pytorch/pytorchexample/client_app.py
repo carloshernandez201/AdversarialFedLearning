@@ -6,6 +6,7 @@ from flwr.clientapp import ClientApp
 
 from pytorchexample.task import (
     Net,
+    backdoor_model,
     load_data,
     test as test_fn,
     train as train_fn,
@@ -41,12 +42,20 @@ def train_method(msg: Message, context: Context):
     train_loss = 0.0  # default so it's always defined
 
     if partition_id in active and attack_mode != 0:
+        bdoor = backdoor_model(
+            label1=0, label2=1,
+            device=device,
+            lr=msg.content["config"]["lr"],
+            num_epochs=context.run_config["local-epochs"],
+            trainloader=trainloader,
+            local_model=model,
+        )
         if attack_mode == 1:
-            model_replacement_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+            model_replacement_attack(bdoor, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device, num_clients=num_partitions)
         elif attack_mode == 2:
-            rotating_malicious_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+            rotating_malicious_attack(bdoor, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
         elif attack_mode == 3:
-            constrain_and_scale_attack(model, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
+            constrain_and_scale_attack(bdoor, model, msg.content["config"]["lr"], context.run_config["local-epochs"], trainloader, device)
     else:
         train_loss = train_fn(
             model,
