@@ -3,7 +3,7 @@
 import torch
 from flwr.app import ArrayRecord, ConfigRecord, Context, MetricRecord
 from flwr.serverapp import Grid, ServerApp
-from pytorchexample.strategy import FedAvg
+from pytorchexample.strategy import FedAvg, FoolsGold
 from pytorchexample.task import Net, get_device, load_centralized_dataset, test
 
 # Create ServerApp
@@ -58,6 +58,10 @@ def main(grid: Grid, context: Context) -> None:
     active_malicious_nodes_per_round = int(
         context.run_config["active-malicious-nodes-per-round"]
     )
+
+    # Defense config: 0 = plain FedAvg, 1 = FoolsGold
+    defense_strategy = int(context.run_config.get("defense-strategy", 0))
+
     (
         num_malicious_nodes,
         active_malicious_nodes_per_round,
@@ -68,14 +72,19 @@ def main(grid: Grid, context: Context) -> None:
         active_malicious_nodes_per_round,
     )
 
-    # Initialize FedAvg strategy
-    strategy = FedAvg(
+    # Pick strategy
+    strategy_kwargs = dict(
         fraction_train=fraction_train,
         fraction_evaluate=fraction_evaluate,
         min_train_nodes=2,
         min_evaluate_nodes=2,
         min_available_nodes=2,
     )
+
+    if defense_strategy == 1:
+        strategy = FoolsGold(**strategy_kwargs)
+    else:
+        strategy = FedAvg(**strategy_kwargs)
 
     # Train-time config sent to clients each round
     init_config = ConfigRecord(
@@ -107,17 +116,12 @@ def main(grid: Grid, context: Context) -> None:
 def global_evaluate(server_round: int, arrays: ArrayRecord) -> MetricRecord:
     """Evaluate model on central data."""
 
-    # Load the model and initialize it with the received weights
     model = Net()
     model.load_state_dict(arrays.to_torch_state_dict())
     device = get_device()
     model.to(device)
 
-    # Load entire test set
     test_dataloader = load_centralized_dataset()
-
-    # Evaluate the global model on the test set
     test_loss, test_acc = test(model, test_dataloader, device)
 
-    # Return the evaluation metrics
     return MetricRecord({"accuracy": test_acc, "loss": test_loss})

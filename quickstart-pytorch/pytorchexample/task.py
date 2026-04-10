@@ -1,4 +1,5 @@
 """pytorchexample: A Flower / PyTorch app."""
+# citation flower readme and https://www.digitalocean.com/community/tutorials/vgg-from-scratch-pytorch
 
 import torch
 import torch.nn as nn
@@ -11,19 +12,22 @@ from torchvision.models import vgg19
 
 
 class Net(nn.Module):
-    """VGG-19 model for CIFAR-10 experiments."""
-
-    def __init__(self, num_classes=10):
+    def __init__(self):
         super().__init__()
-        self.model = vgg19(weights=None)
-        in_features = self.model.classifier[-1].in_features
-        self.model.classifier[-1] = nn.Linear(in_features, num_classes)
+        self.features = nn.Sequential(
+            nn.Conv2d(3, 32, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(32, 64, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(64, 128, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+        )
+        self.classifier = nn.Sequential(
+            nn.Flatten(), nn.Linear(2048, 256), nn.ReLU(), nn.Dropout(0.3), nn.Linear(256, 10),
+        )
 
     def forward(self, x):
-        return self.model(x)
-
+        return self.classifier(self.features(x))
 
 fds = None  # Cache FederatedDataset
+central_test = None
 
 pytorch_transforms = Compose(
     [
@@ -41,23 +45,19 @@ def apply_transforms(batch):
 
 def load_data(partition_id: int, num_partitions: int, batch_size: int):
     """Load partition CIFAR10 data."""
-    # Only initialize `FederatedDataset` once
     global fds
     if fds is None:
         partitioner = DirichletPartitioner(
-        num_partitions=num_partitions,
-        partition_by="label",
-        alpha=0.9,
+            num_partitions=num_partitions,
+            partition_by="label",
+            alpha=0.9,
         )
-        
         fds = FederatedDataset(
             dataset="uoft-cs/cifar10",
             partitioners={"train": partitioner},
         )
     partition = fds.load_partition(partition_id)
-    # Divide data on each node: 80% train, 20% test
     partition_train_test = partition.train_test_split(test_size=0.2, seed=42)
-    # Construct dataloaders
     partition_train_test = partition_train_test.with_transform(apply_transforms)
     trainloader = DataLoader(
         partition_train_test["train"], batch_size=batch_size, shuffle=True
@@ -67,16 +67,16 @@ def load_data(partition_id: int, num_partitions: int, batch_size: int):
 
 
 def load_centralized_dataset():
-    """Load test set and return dataloader."""
-    # Load entire test set
-    test_dataset = load_dataset("uoft-cs/cifar10", split="test")
-    dataset = test_dataset.with_format("torch").with_transform(apply_transforms)
-    return DataLoader(dataset, batch_size=128)
-
+    global central_test
+    if central_test is None:
+        test_dataset = load_dataset("uoft-cs/cifar10", split="test")
+        dataset = test_dataset.with_format("torch").with_transform(apply_transforms)
+        central_test = DataLoader(dataset, batch_size=128)
+    return central_test
 
 def train(net, trainloader, epochs, lr, device):
     """Train the model on the training set."""
-    net.to(device)  # move model to GPU if available
+    net.to(device)
     criterion = torch.nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.SGD(net.parameters(), lr=lr, momentum=0.9)
     net.train()

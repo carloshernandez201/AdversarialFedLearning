@@ -7,7 +7,6 @@ from flwr.clientapp import ClientApp
 
 from pytorchexample.task import (
     Net,
-    backdoor_model,
     load_data,
     test as test_fn,
     train as train_fn,
@@ -44,6 +43,9 @@ def train_method(msg: Message, context: Context):
     # Read per-round config from the message (not the static toml)
     lr = float(msg.content["config"]["lr"])
     attack_mode = int(msg.content["config"]["attack-mode"])
+    active_attackers = set()
+
+if "active-attackers" in msg.content["config"]:
     active_attackers = {
         int(node_id)
         for node_id in ast.literal_eval(msg.content["config"]["active-attackers"])
