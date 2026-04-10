@@ -3,43 +3,91 @@
 import torch
 from flwr.app import ArrayRecord, ConfigRecord, Context, MetricRecord
 from flwr.serverapp import Grid, ServerApp
-from flwr.serverapp.strategy import FedAvg
-
-from pytorchexample.task import Net, load_centralized_dataset, test
+from pytorchexample.strategy import FedAvg
+from pytorchexample.task import Net, get_device, load_centralized_dataset, test
 
 # Create ServerApp
 app = ServerApp()
+
+
+def _derive_attack_schedule(
+    attack_mode: int,
+    num_malicious_nodes: int,
+    active_malicious_nodes_per_round: int,
+) -> tuple[int, int, bool]:
+    """Derive attacker scheduling from attack mode."""
+    total_malicious = max(0, num_malicious_nodes)
+    default_active = max(1, total_malicious) if total_malicious > 0 else 0
+    requested_active = (
+        active_malicious_nodes_per_round
+        if active_malicious_nodes_per_round > 0
+        else default_active
+    )
+    active = min(requested_active, total_malicious)
+
+    if attack_mode == 0:
+        return 0, 0, False
+    if attack_mode == 2:
+        return total_malicious, active, True
+    if attack_mode in (1, 3):
+        return total_malicious, active, False
+
+    # Unknown mode: safest fallback is disable attacker scheduling.
+    return 0, 0, False
 
 
 @app.main()
 def main(grid: Grid, context: Context) -> None:
     """Main entry point for the ServerApp."""
 
-    # Read run config
-    fraction_evaluate: float = context.run_config["fraction-evaluate"]
-    num_rounds: int = context.run_config["num-server-rounds"]
-    lr: float = context.run_config["learning-rate"]
-
     # Load global model
     global_model = Net()
     arrays = ArrayRecord(global_model.state_dict())
 
-    # Initialize FedAvg strategy
-    strategy = FedAvg(fraction_evaluate=fraction_evaluate)
+    # Read run config
+    fraction_train = float(context.run_config["fraction-train"])
+    fraction_evaluate = float(context.run_config["fraction-evaluate"])
+    num_rounds = int(context.run_config["num-server-rounds"])
+    lr = float(context.run_config["learning-rate"])
+    attack_mode = int(context.run_config["attack-mode"])
+    target_label = int(context.run_config["target-label"])
+    poison_fraction = float(context.run_config["poison-fraction"])
+    trigger_size = int(context.run_config["trigger-size"])
+    scale_factor = float(context.run_config["scale-factor"])
+    num_malicious_nodes = int(context.run_config["num-malicious-nodes"])
+    active_malicious_nodes_per_round = int(
+        context.run_config["active-malicious-nodes-per-round"]
+    )
+    (
+        num_malicious_nodes,
+        active_malicious_nodes_per_round,
+        rotate_malicious_nodes,
+    ) = _derive_attack_schedule(
+        attack_mode,
+        num_malicious_nodes,
+        active_malicious_nodes_per_round,
+    )
 
-    '''
-    SET BACKDOOR ATTACK MODE
-    0: No attack
-    1: Model Replacement Attack
-    2: Our Rotating Malicious Strategy
-    3: CONSTRAIN AND SCALE
-    '''
-    # Define config sent to all clients each round; attacker clients use attack-mode and active-attackers
-    init_config = ConfigRecord({
-        "lr": lr,
-        "attack-mode": context.run_config["attack-mode"],
-        "active-attackers": context.run_config["active-attackers"],
-    })
+    # Initialize FedAvg strategy
+    strategy = FedAvg(
+        fraction_train=fraction_train,
+        fraction_evaluate=fraction_evaluate,
+        min_train_nodes=2,
+        min_evaluate_nodes=2,
+        min_available_nodes=2,
+    )
+
+    # Train-time config sent to clients each round
+    init_config = ConfigRecord(
+        {
+            "lr": lr,
+            "attack-mode": attack_mode,
+            "target-label": target_label,
+            "poison-fraction": poison_fraction,
+            "trigger-size": trigger_size,
+            "scale-factor": scale_factor,
+        }
+    )
 
     result = strategy.start(
         grid=grid,
@@ -47,10 +95,11 @@ def main(grid: Grid, context: Context) -> None:
         train_config=init_config,
         num_rounds=num_rounds,
         evaluate_fn=global_evaluate,
+        num_malicious_nodes=num_malicious_nodes,
+        active_malicious_nodes_per_round=active_malicious_nodes_per_round,
+        rotate_malicious_nodes=rotate_malicious_nodes,
     )
-
     # Save final model to disk
-    print("\nSaving final model to disk...")
     state_dict = result.arrays.to_torch_state_dict()
     torch.save(state_dict, "final_model.pt")
 
@@ -61,7 +110,7 @@ def global_evaluate(server_round: int, arrays: ArrayRecord) -> MetricRecord:
     # Load the model and initialize it with the received weights
     model = Net()
     model.load_state_dict(arrays.to_torch_state_dict())
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = get_device()
     model.to(device)
 
     # Load entire test set

@@ -1,0 +1,30 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+# OS stuff
+.DS_Store
+Thumbs.db
+
+# Flower packaged apps (optional)
+.flwr/
+
+# Model outputs
+final_model.pt
+*.pt
