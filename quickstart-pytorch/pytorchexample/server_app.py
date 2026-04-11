@@ -9,6 +9,10 @@ from pytorchexample.task import Net, get_device, load_centralized_dataset, test
 # Create ServerApp
 app = ServerApp()
 
+EVAL_TARGET_LABEL = 0
+EVAL_POISON_FRACTION = 0.0
+EVAL_TRIGGER_SIZE = 3
+
 
 def _derive_attack_schedule(
     attack_mode: int,
@@ -36,9 +40,104 @@ def _derive_attack_schedule(
     return 0, 0, False
 
 
+def _evaluate_poisoned_subset(
+    model: Net,
+    test_dataloader,
+    device: torch.device,
+    target_label: int,
+    poison_fraction: float,
+    trigger_size: int,
+) -> tuple[float, float, float, int]:
+    """Evaluate backdoor behavior on a poisoned subset of the test data."""
+
+    if poison_fraction <= 0.0:
+        return 0.0, 0.0, 0.0, 0
+
+    criterion = torch.nn.CrossEntropyLoss()
+    poisoned_loss_sum = 0.0
+    poisoned_correct = 0
+    poisoned_examples = 0
+    asr_success = 0
+    asr_total = 0
+
+    model.eval()
+    with torch.no_grad():
+        for batch in test_dataloader:
+            images = batch["img"].to(device)
+            labels = batch["label"].to(device)
+            batch_size = images.size(0)
+
+            num_poison = min(batch_size, max(1, int(batch_size * poison_fraction)))
+            if num_poison <= 0:
+                continue
+
+            poisoned_images = images.clone()
+            poisoned_images[:num_poison, :, -trigger_size:, -trigger_size:] = 1.0
+            poisoned_targets = labels[:num_poison].clone()
+            poisoned_targets[:] = target_label
+
+            outputs = model(poisoned_images[:num_poison])
+            poisoned_loss_sum += criterion(outputs, poisoned_targets).item() * num_poison
+
+            predictions = torch.max(outputs.data, 1)[1]
+            poisoned_correct += (predictions == poisoned_targets).sum().item()
+            poisoned_examples += num_poison
+
+            non_target_mask = labels[:num_poison] != target_label
+            asr_total += non_target_mask.sum().item()
+            if non_target_mask.any().item():
+                asr_success += (
+                    predictions[non_target_mask] == target_label
+                ).sum().item()
+
+    poisoned_loss = poisoned_loss_sum / poisoned_examples if poisoned_examples else 0.0
+    poisoned_accuracy = poisoned_correct / poisoned_examples if poisoned_examples else 0.0
+    attack_success_rate = asr_success / asr_total if asr_total else 0.0
+    return poisoned_loss, poisoned_accuracy, attack_success_rate, poisoned_examples
+
+
+def global_evaluate(server_round: int, arrays: ArrayRecord) -> MetricRecord:
+    """Evaluate model on clean and poisoned central test data."""
+    _ = server_round
+
+    model = Net()
+    model.load_state_dict(arrays.to_torch_state_dict())
+    device = get_device()
+    model.to(device)
+
+    test_dataloader = load_centralized_dataset()
+    test_loss, test_acc = test(model, test_dataloader, device)
+
+    (
+        poisoned_loss,
+        poisoned_accuracy,
+        attack_success_rate,
+        poisoned_examples,
+    ) = _evaluate_poisoned_subset(
+        model,
+        test_dataloader,
+        device,
+        target_label=EVAL_TARGET_LABEL,
+        poison_fraction=EVAL_POISON_FRACTION,
+        trigger_size=EVAL_TRIGGER_SIZE,
+    )
+
+    return MetricRecord(
+        {
+            "accuracy": test_acc,
+            "loss": test_loss,
+            "poisoned_accuracy": poisoned_accuracy,
+            "poisoned_loss": poisoned_loss,
+            "attack_success_rate": attack_success_rate,
+            "poisoned_examples": poisoned_examples,
+        }
+    )
+
+
 @app.main()
 def main(grid: Grid, context: Context) -> None:
     """Main entry point for the ServerApp."""
+    global EVAL_TARGET_LABEL, EVAL_POISON_FRACTION, EVAL_TRIGGER_SIZE
 
     # Load global model
     global_model = Net()
@@ -67,6 +166,9 @@ def main(grid: Grid, context: Context) -> None:
         num_malicious_nodes,
         active_malicious_nodes_per_round,
     )
+    EVAL_TARGET_LABEL = target_label
+    EVAL_POISON_FRACTION = poison_fraction
+    EVAL_TRIGGER_SIZE = trigger_size
 
     # Initialize FedAvg strategy
     strategy = FedAvg(
@@ -102,22 +204,3 @@ def main(grid: Grid, context: Context) -> None:
     # Save final model to disk
     state_dict = result.arrays.to_torch_state_dict()
     torch.save(state_dict, "final_model.pt")
-
-
-def global_evaluate(server_round: int, arrays: ArrayRecord) -> MetricRecord:
-    """Evaluate model on central data."""
-
-    # Load the model and initialize it with the received weights
-    model = Net()
-    model.load_state_dict(arrays.to_torch_state_dict())
-    device = get_device()
-    model.to(device)
-
-    # Load entire test set
-    test_dataloader = load_centralized_dataset()
-
-    # Evaluate the global model on the test set
-    test_loss, test_acc = test(model, test_dataloader, device)
-
-    # Return the evaluation metrics
-    return MetricRecord({"accuracy": test_acc, "loss": test_loss})

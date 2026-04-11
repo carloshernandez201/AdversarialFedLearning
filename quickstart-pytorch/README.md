@@ -123,6 +123,15 @@ Use these keys inside `--run-config "..."`:
 | `num-malicious-nodes` | int | Total malicious client IDs considered by the server (`0..num-malicious-nodes-1`). |
 | `active-malicious-nodes-per-round` | int | Number of malicious clients active per round. If `<=0`, it defaults to all malicious nodes. |
 
+### Server-side evaluation metrics
+
+`result.evaluate_metrics_serverapp` now contains:
+
+- `accuracy`, `loss`: clean test performance on the full centralized test set.
+- `poisoned_accuracy`, `poisoned_loss`: performance on the poisoned subset of each test batch.
+- `attack_success_rate`: fraction of poisoned **non-target-label** samples classified as the attacker target label.
+- `poisoned_examples`: number of samples used for poisoned evaluation.
+
 #### Common command-line flags
 
 | Flag | Description |
