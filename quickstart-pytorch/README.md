@@ -94,7 +94,7 @@ flwr run . --run-config "attack-mode=2 num-malicious-nodes=10 active-malicious-n
 flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=0 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64"
 
 # 1) Model Replacement (fixed malicious set)
-flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=1 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
+flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=1 num-malicious-nodes=5 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
 
 # 2) Rotating Malicious
 flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=2 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
