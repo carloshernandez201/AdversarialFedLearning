@@ -87,20 +87,22 @@ Example (rotating malicious attack):
 flwr run . --run-config "attack-mode=2 num-malicious-nodes=10 active-malicious-nodes-per-round=3"
 ```
 
-### Four experiment commands (copy/paste)
+### Four experiment commands (copy/paste) - HiPerGator
+
+Use the same setup across attack modes for fair comparison. Only `attack-mode` changes.
 
 ```bash
 # 0) Benign (no attack)
-flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=0 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64"
+flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=0 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64"
 
 # 1) Model Replacement (fixed malicious set)
-flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=1 num-malicious-nodes=5 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
+flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=1 num-malicious-nodes=2 active-malicious-nodes-per-round=1 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=2.5"
 
 # 2) Rotating Malicious
-flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=2 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
+flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=2 num-malicious-nodes=2 active-malicious-nodes-per-round=1 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=2.5"
 
 # 3) Constrain-and-Scale (fixed malicious set)
-flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=3 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=20 local-epochs=3 learning-rate=0.02 batch-size=64 target-label=0 poison-fraction=0.3 trigger-size=3 scale-factor=8.0"
+flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=3 num-malicious-nodes=2 active-malicious-nodes-per-round=1 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=2.5"
 ```
 
 ### Run-config parameter reference
@@ -122,6 +124,7 @@ Use these keys inside `--run-config "..."`:
 | `scale-factor` | float | Multiplier for the malicious model update (`w_global + scale * delta`). |
 | `num-malicious-nodes` | int | Total malicious client IDs considered by the server (`0..num-malicious-nodes-1`). |
 | `active-malicious-nodes-per-round` | int | Number of malicious clients active per round. If `<=0`, it defaults to all malicious nodes. |
+| `metrics-csv` | string (path) | Optional CSV file path to store per-round metrics (`train_agg`, `eval_agg`, `server_eval`) and final server metrics for plotting. |
 
 ### Server-side evaluation metrics
 
@@ -144,7 +147,7 @@ Example with multiple overrides:
 
 ```bash
 flwr run . --stream \
-  --run-config "num-server-rounds=20 local-epochs=2 learning-rate=0.01 batch-size=32 attack-mode=2 num-malicious-nodes=10 active-malicious-nodes-per-round=3" \
+  --run-config "num-server-rounds=20 local-epochs=2 learning-rate=0.01 batch-size=32 attack-mode=2 num-malicious-nodes=10 active-malicious-nodes-per-round=3 metrics-csv=results/exp_attack2.csv" \
   --federation-config "num-supernodes=2"
 ```
 

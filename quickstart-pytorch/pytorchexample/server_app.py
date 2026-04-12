@@ -6,6 +6,12 @@ from flwr.serverapp import Grid, ServerApp
 from pytorchexample.strategy import FedAvg
 from pytorchexample.task import Net, get_device, load_centralized_dataset, test
 
+import os
+os.environ["RAY_TMPDIR"] = "/tmp/ray_k"
+os.environ["FLWR_HOME"] = "/tmp/flwr_k"
+os.makedirs("/tmp/ray_k", exist_ok=True)
+os.makedirs("/tmp/flwr_k", exist_ok=True)
+
 # Create ServerApp
 app = ServerApp()
 
@@ -153,6 +159,10 @@ def main(grid: Grid, context: Context) -> None:
     poison_fraction = float(context.run_config["poison-fraction"])
     trigger_size = int(context.run_config["trigger-size"])
     scale_factor = float(context.run_config["scale-factor"])
+    metrics_csv_path = None
+    if "metrics-csv" in context.run_config:
+        csv_value = str(context.run_config["metrics-csv"]).strip()
+        metrics_csv_path = csv_value if csv_value else None
     num_malicious_nodes = int(context.run_config["num-malicious-nodes"])
     active_malicious_nodes_per_round = int(
         context.run_config["active-malicious-nodes-per-round"]
@@ -200,6 +210,7 @@ def main(grid: Grid, context: Context) -> None:
         num_malicious_nodes=num_malicious_nodes,
         active_malicious_nodes_per_round=active_malicious_nodes_per_round,
         rotate_malicious_nodes=rotate_malicious_nodes,
+        metrics_csv_path=metrics_csv_path,
     )
     # Save final model to disk
     state_dict = result.arrays.to_torch_state_dict()

@@ -40,19 +40,20 @@ serverapp = "pytorchexample.server_app:app"
 clientapp = "pytorchexample.client_app:app"
 
 [tool.flwr.app.config]
-num-server-rounds = 20
-fraction-train = 0.3
-fraction-evaluate = 0.5
-local-epochs = 3
-learning-rate = 0.02
+num-server-rounds = 40
+fraction-train = 0.6
+fraction-evaluate = 1.0
+local-epochs = 2
+learning-rate = 0.01
 batch-size = 64
 attack-mode = 0
 target-label = 0
-poison-fraction = 0.3
+poison-fraction = 0.12
 trigger-size = 3
-scale-factor = 8.0
-num-malicious-nodes = 0
-active-malicious-nodes-per-round = 0
+scale-factor = 2.5
+num-malicious-nodes = 2
+active-malicious-nodes-per-round = 1
+metrics-csv = ""
 
 
 #######################################################################
