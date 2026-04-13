@@ -1,0 +1,1061 @@
+
+================================================================================
+[2026-04-13 02:27:15] Attempt 1 | robust_foolsgold=0
+CMD: /Users/kausthubhkonuru/School/DistML/AdversarialFedLearning/quickstart-pytorch/.venv/bin/flwr run . --stream --federation-config num-supernodes=10 --run-config attack-mode=3 defense-method=3 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=1.3 metrics-csv='results/constrain-foolsgold.csv'
+🎊 Successfully started run 17726519968853941724
+[92mINFO [0m:      Starting logstream for run_id `17726519968853941724`
+[92mINFO [0m:      Starting Flower Simulation
+/Users/kausthubhkonuru/School/DistML/AdversarialFedLearning/quickstart-pytorch/.venv/lib/python3.11/site-packages/ray/_private/worker.py:2051: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+[92mINFO [0m:      Starting FedAvg strategy:
+[92mINFO [0m:      	├── Number of rounds: 40
+[92mINFO [0m:      	├── ArrayRecord (532.58 MB)
+[92mINFO [0m:      	├── ConfigRecord (train): {'lr': 0.01, 'attack-mode': 3, 'target-label': 0, 'poison-fraction': 0.12, 'trigger-size': 3, 'scale-factor': 1.3}
+[92mINFO [0m:      	├── ConfigRecord (evaluate): (empty!)
+[92mINFO [0m:      	├──> Sampling:
+[92mINFO [0m:      	│	├──Fraction: train (0.60) | evaluate ( 1.00)
+[92mINFO [0m:      	│	├──Minimum nodes: train (2) | evaluate (2)
+[92mINFO [0m:      	│	└──Minimum available nodes: 2
+[92mINFO [0m:      	└──> Keys in records:
+[92mINFO [0m:      		├── Weighted by: 'num-examples'
+[92mINFO [0m:      		├── ArrayRecord key: 'arrays'
+[92mINFO [0m:      		└── ConfigRecord key: 'config'
+[92mINFO [0m:      
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[92mINFO [0m:      Initial global evaluation results: {'accuracy': 0.0952, 'loss': 2.302613222146336, 'poisoned_accuracy': 0.0, 'poisoned_loss': 2.3156813398372607, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 1/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[36m(ClientAppActor pid=71096)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[36m(pid=gcs_server)[0m [2026-04-13 02:27:51,502 E 71072 2519473] (gcs_server) gcs_server.cc:302: Failed to establish connection to the event+metrics exporter agent. Events and metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[36m(ClientAppActor pid=71102)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.[32m [repeated 3x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[33m(raylet)[0m [2026-04-13 02:27:52,188 E 71076 2519755] (raylet) main.cc:975: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[36m(ClientAppActor pid=71100)[0m [2026-04-13 02:27:52,985 E 71100 2521094] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9208092131338603, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.21012009450670402, 'foolsgold_weight_min': 0.06318741883129363, 'foolsgold_weight_max': 0.6362300445677451, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.2388263515961018}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 2662 MiB, 4 objects, write throughput 1823 MiB/s. Set RAY_verbose_spill_logs=0 to disable this message.
+[36m(ClientAppActor pid=71098)[0m [2026-04-13 02:27:53,109 E 71098 2521294] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14[32m [repeated 7x across cluster][0m
+[36m(raylet)[0m Spilled 4793 MiB, 6 objects, write throughput 1141 MiB/s.
+[36m(ClientAppActor pid=71100)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 2.30860543916524, 'eval_acc': 0.16121939030484758}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1634, 'loss': 2.2999758358243145, 'poisoned_accuracy': 0.0, 'poisoned_loss': 2.5735306300025633, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 2/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.750086173601413, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.20566827838519386, 'foolsgold_weight_min': 0.06936128585143275, 'foolsgold_weight_max': 0.6264316737780715, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.2611619054121863}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.9781247060355038, 'eval_acc': 0.2369815092453773}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2298, 'loss': 1.9813476378404642, 'poisoned_accuracy': 0.0, 'poisoned_loss': 3.519908386046412, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 3/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.5694052351912955, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.1835118549110037, 'foolsgold_weight_min': 0.06012391291776577, 'foolsgold_weight_max': 0.5683448714087311, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.3368902899893138}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 9053 MiB, 10 objects, write throughput 1017 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.83856644568064, 'eval_acc': 0.2737631184407796}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2703, 'loss': 1.8434112524684472, 'poisoned_accuracy': 0.0, 'poisoned_loss': 4.02494722793084, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 4/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.4901874115029097, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.22753706993618034, 'foolsgold_weight_min': 0.04615403698490956, 'foolsgold_weight_max': 0.6698923771847967, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.1232540711409367}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 16509 MiB, 17 objects, write throughput 1426 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.8155939502119205, 'eval_acc': 0.29845077461269365}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2957, 'loss': 1.814643932294242, 'poisoned_accuracy': 0.0, 'poisoned_loss': 4.560178995132446, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 5/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.3956395684441385, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2100255580936507, 'foolsgold_weight_min': 0.03257392936035748, 'foolsgold_weight_max': 0.6243502347183386, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.1860977314972065}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.7630548154965207, 'eval_acc': 0.31944027986006995}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3184, 'loss': 1.755420736119717, 'poisoned_accuracy': 0.0, 'poisoned_loss': 4.710823633852013, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 6/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.3578247745142409, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2557783664652175, 'foolsgold_weight_min': 0.03717686241430354, 'foolsgold_weight_max': 0.735722918653264, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.9717549566993686}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.7306156620536373, 'eval_acc': 0.34062968515742126}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3397, 'loss': 1.72468167769758, 'poisoned_accuracy': 0.0, 'poisoned_loss': 4.79506078772215, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 7/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.3660730849658087, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2361100031095634, 'foolsgold_weight_min': 0.05526748567730201, 'foolsgold_weight_max': 0.6944982270740644, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.1058356127235085}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.736795220149248, 'eval_acc': 0.33283358320839584}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3425, 'loss': 1.7265395227866838, 'poisoned_accuracy': 0.026473099914602904, 'poisoned_loss': 3.7224242819566995, 'attack_success_rate': 0.01413760603204524, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 8/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.2450958031923776, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666663, 'foolsgold_weight_std': 0.21885446200336944, 'foolsgold_weight_min': 0.050048072328117865, 'foolsgold_weight_max': 0.655008838809609, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.190418599627846}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 33552 MiB, 34 objects, write throughput 770 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.5600183206436564, 'eval_acc': 0.4141929035482259}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.4212, 'loss': 1.5496834833410722, 'poisoned_accuracy': 0.04269854824935952, 'poisoned_loss': 3.546157368628211, 'attack_success_rate': 0.019792648444863337, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 9/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.2470000143430386, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666663, 'foolsgold_weight_std': 0.27957482694434677, 'foolsgold_weight_min': 0.023139087004286886, 'foolsgold_weight_max': 0.7908713065459007, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.8320860114881574}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.6577866401038721, 'eval_acc': 0.4038980509745127}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.4104, 'loss': 1.63836457910417, 'poisoned_accuracy': 0.0, 'poisoned_loss': 4.881821155548096, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 10/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.1319623639997152, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.2504920934267143, 'foolsgold_weight_min': 0.03320863615943902, 'foolsgold_weight_max': 0.7205524437111755, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.9826838509762444}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.5183030392824917, 'eval_acc': 0.44337831084457763}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.4495, 'loss': 1.5122033312350889, 'poisoned_accuracy': 0.07258753202391119, 'poisoned_loss': 3.8573996159482675, 'attack_success_rate': 0.03864278982092366, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 11/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.1801195077146285, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.152517799769588, 'foolsgold_weight_min': 0.042199387578934135, 'foolsgold_weight_max': 0.38145666037910425, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.3952060920361782}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.4721584021107317, 'eval_acc': 0.4754622688655672}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.4678, 'loss': 1.4804833282398273, 'poisoned_accuracy': 0.13578138343296328, 'poisoned_loss': 2.0703332422127794, 'attack_success_rate': 0.07445805843543826, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 12/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.0335981030123382, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.24095614206967228, 'foolsgold_weight_min': 0.027450281880230753, 'foolsgold_weight_max': 0.6932492302110214, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.0104712134456935}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.5261271884618435, 'eval_acc': 0.4881559220389805}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.496, 'loss': 1.5250190285187732, 'poisoned_accuracy': 0.04355251921434671, 'poisoned_loss': 4.624266819501921, 'attack_success_rate': 0.021677662582469368, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 13/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.0161684608645465, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.21232141939065918, 'foolsgold_weight_min': 0.05355162672537299, 'foolsgold_weight_max': 0.6401020769256398, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.2220875873485453}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.6585196031286222, 'eval_acc': 0.4385807096451774}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.4364, 'loss': 1.6835299805749822, 'poisoned_accuracy': 0.07685738684884715, 'poisoned_loss': 2.770886188282303, 'attack_success_rate': 0.03864278982092366, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 14/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.9704590393448604, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666663, 'foolsgold_weight_std': 0.23102354630217048, 'foolsgold_weight_min': 0.050341040270507335, 'foolsgold_weight_max': 0.6827889520363575, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.1306376433988565}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 66039 MiB, 65 objects, write throughput 754 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.3829420504255805, 'eval_acc': 0.5215392303848077}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5168, 'loss': 1.3963139706020113, 'poisoned_accuracy': 0.05209222886421862, 'poisoned_loss': 4.687367519896627, 'attack_success_rate': 0.01885014137606032, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 15/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.8837663002404482, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2758137167153259, 'foolsgold_weight_min': 0.019525147681195534, 'foolsgold_weight_max': 0.7816607579299822, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.8463008259462288}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.39477206444739, 'eval_acc': 0.5438280859570216}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5557, 'loss': 1.3813520534129082, 'poisoned_accuracy': 0.08198121263877028, 'poisoned_loss': 5.310501241969003, 'attack_success_rate': 0.02544769085768143, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 16/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.8116190165260238, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2573442165672307, 'foolsgold_weight_min': 0.015065916555678259, 'foolsgold_weight_max': 0.7386145325271003, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.9416516884513088}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.299901715481614, 'eval_acc': 0.5832083958020989}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.581, 'loss': 1.308956425401229, 'poisoned_accuracy': 0.07856532877882152, 'poisoned_loss': 5.689258020418918, 'attack_success_rate': 0.02827521206409048, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 17/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.8200785112875473, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.23404881655773974, 'foolsgold_weight_min': 0.014982089485194501, 'foolsgold_weight_max': 0.6636329421353535, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.9916900386033609}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2264487867634277, 'eval_acc': 0.5866066966516741}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5872, 'loss': 1.2492053244687333, 'poisoned_accuracy': 0.0017079419299743809, 'poisoned_loss': 6.574451613080084, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 18/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.9051142940995905, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.16881705779777204, 'foolsgold_weight_min': 0.07804653423396853, 'foolsgold_weight_max': 0.5411332182410954, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.4148883935778656}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.0093773550378466, 'eval_acc': 0.6469765117441278}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.637, 'loss': 1.026963061169733, 'poisoned_accuracy': 0.06660973526900085, 'poisoned_loss': 4.595377280710092, 'attack_success_rate': 0.019792648444863337, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 19/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.7648876254650052, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666666, 'foolsgold_weight_std': 0.2773618518887203, 'foolsgold_weight_min': 0.01716859554676246, 'foolsgold_weight_max': 0.7842492943548542, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.8264214747279864}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2285646531277867, 'eval_acc': 0.6127936031984007}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6091, 'loss': 1.2644866674761228, 'poisoned_accuracy': 0.07941929974380871, 'poisoned_loss': 5.562320168867363, 'attack_success_rate': 0.029217719132893498, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 20/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.7228985500434467, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2423189851671138, 'foolsgold_weight_min': 0.03978583553417659, 'foolsgold_weight_max': 0.7065732815436921, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.057983608444245}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2212767486172362, 'eval_acc': 0.6357821089455271}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6339, 'loss': 1.2278777081755143, 'poisoned_accuracy': 0.11187019641332195, 'poisoned_loss': 5.480469574590304, 'attack_success_rate': 0.0471253534401508, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 21/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.6659125969726075, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2727056776991396, 'foolsgold_weight_min': 0.007695149394641714, 'foolsgold_weight_max': 0.7697571149794277, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.8012925089581214}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.5056083588950369, 'eval_acc': 0.5766116941529236}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5851, 'loss': 1.5180622852301295, 'poisoned_accuracy': 0.053800170794193, 'poisoned_loss': 6.862062201756478, 'attack_success_rate': 0.016022620169651274, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 22/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.7166014953858189, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.20936376678020013, 'foolsgold_weight_min': 0.047152219658725944, 'foolsgold_weight_max': 0.6327358963999684, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.2317831399483778}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2573346107001826, 'eval_acc': 0.6449775112443779}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6426, 'loss': 1.2920897210700601, 'poisoned_accuracy': 0.06831767719897523, 'poisoned_loss': 6.762867634363606, 'attack_success_rate': 0.019792648444863337, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 23/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.776992415779425, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666663, 'foolsgold_weight_std': 0.300859890347251, 'foolsgold_weight_min': 0.011907634118422966, 'foolsgold_weight_max': 0.838296560830234, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.6733152381815024}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.1294534089504116, 'eval_acc': 0.6290854572713643}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6194, 'loss': 1.164813281614569, 'poisoned_accuracy': 0.07173356105892399, 'poisoned_loss': 4.861489496304376, 'attack_success_rate': 0.021677662582469368, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 24/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.7088772662408096, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.19134611854999997, 'foolsgold_weight_min': 0.019424321878380786, 'foolsgold_weight_max': 0.4369087294874416, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.1501160610782755}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9934106165251407, 'eval_acc': 0.6770614692653673}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6713, 'loss': 1.0167684736131113, 'poisoned_accuracy': 0.03842869342442357, 'poisoned_loss': 5.821710168144624, 'attack_success_rate': 0.00471253534401508, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 25/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.5926312246459372, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.24327328660052122, 'foolsgold_weight_min': 0.04434757855983274, 'foolsgold_weight_max': 0.7099715398392361, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.0615825590382162}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.4002641827056153, 'eval_acc': 0.6312843578210895}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6307, 'loss': 1.4359325457222853, 'poisoned_accuracy': 0.053800170794193, 'poisoned_loss': 7.377838520796049, 'attack_success_rate': 0.012252591894439209, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 26/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.5278334993427453, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.23504651478914954, 'foolsgold_weight_min': 0.040217049735686704, 'foolsgold_weight_max': 0.6902864925329733, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.0982949837896574}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.29448370694826, 'eval_acc': 0.6570714642678661}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6486, 'loss': 1.3091445972647848, 'poisoned_accuracy': 0.07173356105892399, 'poisoned_loss': 6.911582505774233, 'attack_success_rate': 0.020735155513666354, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 27/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.5685169554572694, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2796386018793429, 'foolsgold_weight_min': 0.0001432929098347199, 'foolsgold_weight_max': 0.7848979143635755, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.7214884387832323}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2373300936841487, 'eval_acc': 0.6547726136931535}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6486, 'loss': 1.2788971028750455, 'poisoned_accuracy': 0.07173356105892399, 'poisoned_loss': 6.676294161456961, 'attack_success_rate': 0.017907634307257305, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 28/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.5395212135954623, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.2155497881327237, 'foolsgold_weight_min': 0.037556495158852364, 'foolsgold_weight_max': 0.6445987908485544, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.189202017409505}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 132079 MiB, 129 objects, write throughput 901 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2791750309203405, 'eval_acc': 0.6421789105447276}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6365, 'loss': 1.3033257043814357, 'poisoned_accuracy': 0.08625106746370624, 'poisoned_loss': 6.121371842570838, 'attack_success_rate': 0.030160226201696512, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 29/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.526689211540954, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.1920726169130575, 'foolsgold_weight_min': 0.0, 'foolsgold_weight_max': 0.4351050056646502, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.0715700787039892}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.205164943691156, 'eval_acc': 0.6824587706146927}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.671, 'loss': 1.2534659399261958, 'poisoned_accuracy': 0.06746370623398805, 'poisoned_loss': 7.247507934586601, 'attack_success_rate': 0.013195098963242224, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 30/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.6872188611659316, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.3039873881471239, 'foolsgold_weight_min': 0.0048819851359264985, 'foolsgold_weight_max': 0.8447968420745208, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.6309380054426946}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.0511382081226657, 'eval_acc': 0.6597701149425287}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6606, 'loss': 1.0730537145952634, 'poisoned_accuracy': 0.08454312553373185, 'poisoned_loss': 4.40146671962168, 'attack_success_rate': 0.029217719132893498, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 31/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.6298464962068988, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.2679294114157705, 'foolsgold_weight_min': 0.01597812924497025, 'foolsgold_weight_max': 0.763102445885675, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.8842527969538911}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.0766879621032794, 'eval_acc': 0.6573713143428286}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6476, 'loss': 1.0899209885657588, 'poisoned_accuracy': 0.08795900939368062, 'poisoned_loss': 4.9993715890954435, 'attack_success_rate': 0.029217719132893498, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 32/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.5421893762333372, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.28925227107397444, 'foolsgold_weight_min': 0.0, 'foolsgold_weight_max': 0.809049427677772, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.6796749306638021}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.6324709415874588, 'eval_acc': 0.569015492253873}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5661, 'loss': 1.6321492542194416, 'poisoned_accuracy': 0.6584116140051238, 'poisoned_loss': 1.0558437150223046, 'attack_success_rate': 0.6286522148916117, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 33/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.5661527357233851, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.23038960565594346, 'foolsgold_weight_min': 0.015420325255659947, 'foolsgold_weight_max': 0.6581003468268485, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.0228346901766103}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9452827505205685, 'eval_acc': 0.7210394802598699}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7114, 'loss': 0.9727376963518843, 'poisoned_accuracy': 0.3928266438941076, 'poisoned_loss': 3.2455186442775057, 'attack_success_rate': 0.34213006597549483, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 34/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.4115900924029853, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.18232197693127902, 'foolsgold_weight_min': 0.05608895036099791, 'foolsgold_weight_max': 0.570837232288669, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.3534436153854474}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.052345910868409, 'eval_acc': 0.7023488255872063}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7044, 'loss': 1.0454444364656377, 'poisoned_accuracy': 0.37233134073441504, 'poisoned_loss': 4.191863303709804, 'attack_success_rate': 0.32045240339302544, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 35/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.42534124142570523, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.2631985224031155, 'foolsgold_weight_min': 0.0084362052703559, 'foolsgold_weight_max': 0.7468589703200993, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.8651009659802502}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2391218831815287, 'eval_acc': 0.679560219890055}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6788, 'loss': 1.2521530472779576, 'poisoned_accuracy': 0.34329632792485054, 'poisoned_loss': 4.316320008237987, 'attack_success_rate': 0.3016022620169651, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 36/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.4976121230785667, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.22282273559772411, 'foolsgold_weight_min': 0.02311349085345316, 'foolsgold_weight_max': 0.6525544097614527, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.1106427615102137}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.012050192698514, 'eval_acc': 0.7054472763618191}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6971, 'loss': 1.030056452449364, 'poisoned_accuracy': 0.30999146029035013, 'poisoned_loss': 4.028897325367525, 'attack_success_rate': 0.26767200754005654, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 37/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.40563156945913736, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.20412411619096305, 'foolsgold_weight_min': 0.04220352582012302, 'foolsgold_weight_max': 0.6193836974469359, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.2485860833456714}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.0335478094512236, 'eval_acc': 0.6947526236881558}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6971, 'loss': 1.0430747300763674, 'poisoned_accuracy': 0.6712211784799317, 'poisoned_loss': 1.3977094523984077, 'attack_success_rate': 0.6399622997172478, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 38/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.3597129869559717, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.1666666666666667, 'foolsgold_weight_std': 0.22931050063137134, 'foolsgold_weight_min': 0.054924917319012154, 'foolsgold_weight_max': 0.6781310122952363, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.1352993153544042}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.1859620778546793, 'eval_acc': 0.6962518740629685}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6975, 'loss': 1.1937652449064617, 'poisoned_accuracy': 0.49701110162254486, 'poisoned_loss': 3.4836056255866685, 'attack_success_rate': 0.4599434495758718, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 39/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.3169933813647472, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.21955206340289546, 'foolsgold_weight_min': 0.05286647401622367, 'foolsgold_weight_max': 0.6562809637554523, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 1.1860316220740719}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2989227692781664, 'eval_acc': 0.722038980509745}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7204, 'loss': 1.3323234742200827, 'poisoned_accuracy': 0.5294619982920581, 'poisoned_loss': 3.9565441488303454, 'attack_success_rate': 0.4891611687087653, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 40/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.4347126811719211, 'nonfinite_updates_filtered': 0, 'foolsgold_mean_weight': 0.16666666666666666, 'foolsgold_weight_std': 0.30422128914734325, 'foolsgold_weight_min': 0.0, 'foolsgold_weight_max': 0.8444253554764484, 'foolsgold_robust': 0, 'foolsgold_weight_entropy': 0.594082313144374}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.478436545991129, 'eval_acc': 0.6047976011994003}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6103, 'loss': 1.4844753817666936, 'poisoned_accuracy': 0.8334756618274979, 'poisoned_loss': 0.5766759248363709, 'attack_success_rate': 0.819038642789821, 'poisoned_examples': 1171}
+[92mINFO [0m:      Saved per-round metrics CSV to results/constrain-foolsgold.csv
+[92mINFO [0m:      
+[92mINFO [0m:      Strategy execution finished in 3467.71s
+[92mINFO [0m:      
+[92mINFO [0m:      Final results:
+[92mINFO [0m:      
+[92mINFO [0m:      	Global Arrays:
+[92mINFO [0m:      		ArrayRecord (1065.154 MB)
+[92mINFO [0m:      	
+[92mINFO [0m:      	Aggregated ClientApp-side Train Metrics:
+[92mINFO [0m:      	{ 1: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '1.2388e+00',
+[92mINFO [0m:      	       'foolsgold_weight_max': '6.3623e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '6.3187e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '2.1012e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.9208e+00'},
+[92mINFO [0m:      	  2: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '1.2612e+00',
+[92mINFO [0m:      	       'foolsgold_weight_max': '6.2643e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '6.9361e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '2.0567e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.7501e+00'},
+[92mINFO [0m:      	  3: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '1.3369e+00',
+[92mINFO [0m:      	       'foolsgold_weight_max': '5.6834e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '6.0124e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '1.8351e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.5694e+00'},
+[92mINFO [0m:      	  4: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '1.1233e+00',
+[92mINFO [0m:      	       'foolsgold_weight_max': '6.6989e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '4.6154e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '2.2754e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.4902e+00'},
+[92mINFO [0m:      	  5: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '1.1861e+00',
+[92mINFO [0m:      	       'foolsgold_weight_max': '6.2435e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '3.2574e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '2.1003e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.3956e+00'},
+[92mINFO [0m:      	  6: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '9.7175e-01',
+[92mINFO [0m:      	       'foolsgold_weight_max': '7.3572e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '3.7177e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '2.5578e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.3578e+00'},
+[92mINFO [0m:      	  7: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '1.1058e+00',
+[92mINFO [0m:      	       'foolsgold_weight_max': '6.9450e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '5.5267e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '2.3611e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.3661e+00'},
+[92mINFO [0m:      	  8: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '1.1904e+00',
+[92mINFO [0m:      	       'foolsgold_weight_max': '6.5501e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '5.0048e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '2.1885e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.2451e+00'},
+[92mINFO [0m:      	  9: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	       'foolsgold_robust': '0',
+[92mINFO [0m:      	       'foolsgold_weight_entropy': '8.3209e-01',
+[92mINFO [0m:      	       'foolsgold_weight_max': '7.9087e-01',
+[92mINFO [0m:      	       'foolsgold_weight_min': '2.3139e-02',
+[92mINFO [0m:      	       'foolsgold_weight_std': '2.7957e-01',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.2470e+00'},
+[92mINFO [0m:      	  10: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '9.8268e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.2055e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '3.3209e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.5049e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '1.1320e+00'},
+[92mINFO [0m:      	  11: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.3952e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '3.8146e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '4.2199e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '1.5252e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '1.1801e+00'},
+[92mINFO [0m:      	  12: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.0105e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.9325e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '2.7450e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.4096e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '1.0336e+00'},
+[92mINFO [0m:      	  13: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.2221e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.4010e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '5.3552e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.1232e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '1.0162e+00'},
+[92mINFO [0m:      	  14: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.1306e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.8279e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '5.0341e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.3102e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '9.7046e-01'},
+[92mINFO [0m:      	  15: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '8.4630e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.8166e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.9525e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.7581e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '8.8377e-01'},
+[92mINFO [0m:      	  16: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '9.4165e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.3861e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.5066e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.5734e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '8.1162e-01'},
+[92mINFO [0m:      	  17: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '9.9169e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.6363e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.4982e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.3405e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '8.2008e-01'},
+[92mINFO [0m:      	  18: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.4149e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '5.4113e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '7.8047e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '1.6882e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '9.0511e-01'},
+[92mINFO [0m:      	  19: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '8.2642e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.8425e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.7169e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.7736e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.6489e-01'},
+[92mINFO [0m:      	  20: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.0580e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.0657e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '3.9786e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.4232e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.2290e-01'},
+[92mINFO [0m:      	  21: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '8.0129e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.6976e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '7.6951e-03',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.7271e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '6.6591e-01'},
+[92mINFO [0m:      	  22: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.2318e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.3274e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '4.7152e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.0936e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.1660e-01'},
+[92mINFO [0m:      	  23: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '6.7332e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '8.3830e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.1908e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '3.0086e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.7699e-01'},
+[92mINFO [0m:      	  24: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.1501e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '4.3691e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.9424e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '1.9135e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.0888e-01'},
+[92mINFO [0m:      	  25: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.0616e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.0997e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '4.4348e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.4327e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.9263e-01'},
+[92mINFO [0m:      	  26: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.0983e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.9029e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '4.0217e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.3505e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.2783e-01'},
+[92mINFO [0m:      	  27: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '7.2149e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.8490e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.4329e-04',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.7964e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.6852e-01'},
+[92mINFO [0m:      	  28: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.1892e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.4460e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '3.7556e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.1555e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.3952e-01'},
+[92mINFO [0m:      	  29: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.0716e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '4.3511e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '0.0000e+00',
+[92mINFO [0m:      	        'foolsgold_weight_std': '1.9207e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.2669e-01'},
+[92mINFO [0m:      	  30: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '6.3094e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '8.4480e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '4.8820e-03',
+[92mINFO [0m:      	        'foolsgold_weight_std': '3.0399e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '6.8722e-01'},
+[92mINFO [0m:      	  31: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '8.8425e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.6310e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.5978e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.6793e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '6.2985e-01'},
+[92mINFO [0m:      	  32: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '6.7967e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '8.0905e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '0.0000e+00',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.8925e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.4219e-01'},
+[92mINFO [0m:      	  33: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.0228e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.5810e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '1.5420e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.3039e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.6615e-01'},
+[92mINFO [0m:      	  34: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.3534e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '5.7084e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '5.6089e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '1.8232e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.1159e-01'},
+[92mINFO [0m:      	  35: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '8.6510e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '7.4686e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '8.4362e-03',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.6320e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.2534e-01'},
+[92mINFO [0m:      	  36: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.1106e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.5255e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '2.3113e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.2282e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.9761e-01'},
+[92mINFO [0m:      	  37: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.2486e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.1938e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '4.2204e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.0412e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.0563e-01'},
+[92mINFO [0m:      	  38: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.1353e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.7813e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '5.4925e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.2931e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '3.5971e-01'},
+[92mINFO [0m:      	  39: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '1.1860e+00',
+[92mINFO [0m:      	        'foolsgold_weight_max': '6.5628e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '5.2866e-02',
+[92mINFO [0m:      	        'foolsgold_weight_std': '2.1955e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '3.1699e-01'},
+[92mINFO [0m:      	  40: { 'foolsgold_mean_weight': '1.6667e-01',
+[92mINFO [0m:      	        'foolsgold_robust': '0',
+[92mINFO [0m:      	        'foolsgold_weight_entropy': '5.9408e-01',
+[92mINFO [0m:      	        'foolsgold_weight_max': '8.4443e-01',
+[92mINFO [0m:      	        'foolsgold_weight_min': '0.0000e+00',
+[92mINFO [0m:      	        'foolsgold_weight_std': '3.0422e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.3471e-01'}}
+[92mINFO [0m:      	
+[92mINFO [0m:      	Aggregated ClientApp-side Evaluate Metrics:
+[92mINFO [0m:      	{ 1: {'eval_acc': '1.6122e-01', 'eval_loss': '2.3086e+00'},
+[92mINFO [0m:      	  2: {'eval_acc': '2.3698e-01', 'eval_loss': '1.9781e+00'},
+[92mINFO [0m:      	  3: {'eval_acc': '2.7376e-01', 'eval_loss': '1.8386e+00'},
+[92mINFO [0m:      	  4: {'eval_acc': '2.9845e-01', 'eval_loss': '1.8156e+00'},
+[92mINFO [0m:      	  5: {'eval_acc': '3.1944e-01', 'eval_loss': '1.7631e+00'},
+[92mINFO [0m:      	  6: {'eval_acc': '3.4063e-01', 'eval_loss': '1.7306e+00'},
+[92mINFO [0m:      	  7: {'eval_acc': '3.3283e-01', 'eval_loss': '1.7368e+00'},
+[92mINFO [0m:      	  8: {'eval_acc': '4.1419e-01', 'eval_loss': '1.5600e+00'},
+[92mINFO [0m:      	  9: {'eval_acc': '4.0390e-01', 'eval_loss': '1.6578e+00'},
+[92mINFO [0m:      	  10: {'eval_acc': '4.4338e-01', 'eval_loss': '1.5183e+00'},
+[92mINFO [0m:      	  11: {'eval_acc': '4.7546e-01', 'eval_loss': '1.4722e+00'},
+[92mINFO [0m:      	  12: {'eval_acc': '4.8816e-01', 'eval_loss': '1.5261e+00'},
+[92mINFO [0m:      	  13: {'eval_acc': '4.3858e-01', 'eval_loss': '1.6585e+00'},
+[92mINFO [0m:      	  14: {'eval_acc': '5.2154e-01', 'eval_loss': '1.3829e+00'},
+[92mINFO [0m:      	  15: {'eval_acc': '5.4383e-01', 'eval_loss': '1.3948e+00'},
+[92mINFO [0m:      	  16: {'eval_acc': '5.8321e-01', 'eval_loss': '1.2999e+00'},
+[92mINFO [0m:      	  17: {'eval_acc': '5.8661e-01', 'eval_loss': '1.2264e+00'},
+[92mINFO [0m:      	  18: {'eval_acc': '6.4698e-01', 'eval_loss': '1.0094e+00'},
+[92mINFO [0m:      	  19: {'eval_acc': '6.1279e-01', 'eval_loss': '1.2286e+00'},
+[92mINFO [0m:      	  20: {'eval_acc': '6.3578e-01', 'eval_loss': '1.2213e+00'},
+[92mINFO [0m:      	  21: {'eval_acc': '5.7661e-01', 'eval_loss': '1.5056e+00'},
+[92mINFO [0m:      	  22: {'eval_acc': '6.4498e-01', 'eval_loss': '1.2573e+00'},
+[92mINFO [0m:      	  23: {'eval_acc': '6.2909e-01', 'eval_loss': '1.1295e+00'},
+[92mINFO [0m:      	  24: {'eval_acc': '6.7706e-01', 'eval_loss': '9.9341e-01'},
+[92mINFO [0m:      	  25: {'eval_acc': '6.3128e-01', 'eval_loss': '1.4003e+00'},
+[92mINFO [0m:      	  26: {'eval_acc': '6.5707e-01', 'eval_loss': '1.2945e+00'},
+[92mINFO [0m:      	  27: {'eval_acc': '6.5477e-01', 'eval_loss': '1.2373e+00'},
+[92mINFO [0m:      	  28: {'eval_acc': '6.4218e-01', 'eval_loss': '1.2792e+00'},
+[92mINFO [0m:      	  29: {'eval_acc': '6.8246e-01', 'eval_loss': '1.2052e+00'},
+[92mINFO [0m:      	  30: {'eval_acc': '6.5977e-01', 'eval_loss': '1.0511e+00'},
+[92mINFO [0m:      	  31: {'eval_acc': '6.5737e-01', 'eval_loss': '1.0767e+00'},
+[92mINFO [0m:      	  32: {'eval_acc': '5.6902e-01', 'eval_loss': '1.6325e+00'},
+[92mINFO [0m:      	  33: {'eval_acc': '7.2104e-01', 'eval_loss': '9.4528e-01'},
+[92mINFO [0m:      	  34: {'eval_acc': '7.0235e-01', 'eval_loss': '1.0523e+00'},
+[92mINFO [0m:      	  35: {'eval_acc': '6.7956e-01', 'eval_loss': '1.2391e+00'},
+[92mINFO [0m:      	  36: {'eval_acc': '7.0545e-01', 'eval_loss': '1.0121e+00'},
+[92mINFO [0m:      	  37: {'eval_acc': '6.9475e-01', 'eval_loss': '1.0335e+00'},
+[92mINFO [0m:      	  38: {'eval_acc': '6.9625e-01', 'eval_loss': '1.1860e+00'},
+[92mINFO [0m:      	  39: {'eval_acc': '7.2204e-01', 'eval_loss': '1.2989e+00'},
+[92mINFO [0m:      	  40: {'eval_acc': '6.0480e-01', 'eval_loss': '1.4784e+00'}}
+[92mINFO [0m:      	
+[92mINFO [0m:      	ServerApp-side Evaluate Metrics:
+[92mINFO [0m:      	{ 0: { 'accuracy': '9.5200e-02',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '2.3026e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.3157e+00'},
+[92mINFO [0m:      	  1: { 'accuracy': '1.6340e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '2.3000e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.5735e+00'},
+[92mINFO [0m:      	  2: { 'accuracy': '2.2980e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.9813e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '3.5199e+00'},
+[92mINFO [0m:      	  3: { 'accuracy': '2.7030e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.8434e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '4.0249e+00'},
+[92mINFO [0m:      	  4: { 'accuracy': '2.9570e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.8146e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '4.5602e+00'},
+[92mINFO [0m:      	  5: { 'accuracy': '3.1840e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.7554e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '4.7108e+00'},
+[92mINFO [0m:      	  6: { 'accuracy': '3.3970e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.7247e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '4.7951e+00'},
+[92mINFO [0m:      	  7: { 'accuracy': '3.4250e-01',
+[92mINFO [0m:      	       'attack_success_rate': '1.4138e-02',
+[92mINFO [0m:      	       'loss': '1.7265e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '2.6473e-02',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '3.7224e+00'},
+[92mINFO [0m:      	  8: { 'accuracy': '4.2120e-01',
+[92mINFO [0m:      	       'attack_success_rate': '1.9793e-02',
+[92mINFO [0m:      	       'loss': '1.5497e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '4.2699e-02',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '3.5462e+00'},
+[92mINFO [0m:      	  9: { 'accuracy': '4.1040e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.6384e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '4.8818e+00'},
+[92mINFO [0m:      	  10: { 'accuracy': '4.4950e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.8643e-02',
+[92mINFO [0m:      	        'loss': '1.5122e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.2588e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.8574e+00'},
+[92mINFO [0m:      	  11: { 'accuracy': '4.6780e-01',
+[92mINFO [0m:      	        'attack_success_rate': '7.4458e-02',
+[92mINFO [0m:      	        'loss': '1.4805e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '1.3578e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.0703e+00'},
+[92mINFO [0m:      	  12: { 'accuracy': '4.9600e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.1678e-02',
+[92mINFO [0m:      	        'loss': '1.5250e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '4.3553e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.6243e+00'},
+[92mINFO [0m:      	  13: { 'accuracy': '4.3640e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.8643e-02',
+[92mINFO [0m:      	        'loss': '1.6835e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.6857e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.7709e+00'},
+[92mINFO [0m:      	  14: { 'accuracy': '5.1680e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.8850e-02',
+[92mINFO [0m:      	        'loss': '1.3963e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.2092e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.6874e+00'},
+[92mINFO [0m:      	  15: { 'accuracy': '5.5570e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.5448e-02',
+[92mINFO [0m:      	        'loss': '1.3814e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '8.1981e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '5.3105e+00'},
+[92mINFO [0m:      	  16: { 'accuracy': '5.8100e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.8275e-02',
+[92mINFO [0m:      	        'loss': '1.3090e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.8565e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '5.6893e+00'},
+[92mINFO [0m:      	  17: { 'accuracy': '5.8720e-01',
+[92mINFO [0m:      	        'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	        'loss': '1.2492e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '1.7079e-03',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '6.5745e+00'},
+[92mINFO [0m:      	  18: { 'accuracy': '6.3700e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.9793e-02',
+[92mINFO [0m:      	        'loss': '1.0270e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.6610e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.5954e+00'},
+[92mINFO [0m:      	  19: { 'accuracy': '6.0910e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.9218e-02',
+[92mINFO [0m:      	        'loss': '1.2645e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.9419e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '5.5623e+00'},
+[92mINFO [0m:      	  20: { 'accuracy': '6.3390e-01',
+[92mINFO [0m:      	        'attack_success_rate': '4.7125e-02',
+[92mINFO [0m:      	        'loss': '1.2279e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '1.1187e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '5.4805e+00'},
+[92mINFO [0m:      	  21: { 'accuracy': '5.8510e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.6023e-02',
+[92mINFO [0m:      	        'loss': '1.5181e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.3800e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '6.8621e+00'},
+[92mINFO [0m:      	  22: { 'accuracy': '6.4260e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.9793e-02',
+[92mINFO [0m:      	        'loss': '1.2921e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.8318e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '6.7629e+00'},
+[92mINFO [0m:      	  23: { 'accuracy': '6.1940e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.1678e-02',
+[92mINFO [0m:      	        'loss': '1.1648e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.1734e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.8615e+00'},
+[92mINFO [0m:      	  24: { 'accuracy': '6.7130e-01',
+[92mINFO [0m:      	        'attack_success_rate': '4.7125e-03',
+[92mINFO [0m:      	        'loss': '1.0168e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '3.8429e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '5.8217e+00'},
+[92mINFO [0m:      	  25: { 'accuracy': '6.3070e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.2253e-02',
+[92mINFO [0m:      	        'loss': '1.4359e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.3800e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '7.3778e+00'},
+[92mINFO [0m:      	  26: { 'accuracy': '6.4860e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.0735e-02',
+[92mINFO [0m:      	        'loss': '1.3091e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.1734e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '6.9116e+00'},
+[92mINFO [0m:      	  27: { 'accuracy': '6.4860e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.7908e-02',
+[92mINFO [0m:      	        'loss': '1.2789e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.1734e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '6.6763e+00'},
+[92mINFO [0m:      	  28: { 'accuracy': '6.3650e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.0160e-02',
+[92mINFO [0m:      	        'loss': '1.3033e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '8.6251e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '6.1214e+00'},
+[92mINFO [0m:      	  29: { 'accuracy': '6.7100e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.3195e-02',
+[92mINFO [0m:      	        'loss': '1.2535e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.7464e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '7.2475e+00'},
+[92mINFO [0m:      	  30: { 'accuracy': '6.6060e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.9218e-02',
+[92mINFO [0m:      	        'loss': '1.0731e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '8.4543e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.4015e+00'},
+[92mINFO [0m:      	  31: { 'accuracy': '6.4760e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.9218e-02',
+[92mINFO [0m:      	        'loss': '1.0899e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '8.7959e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.9994e+00'},
+[92mINFO [0m:      	  32: { 'accuracy': '5.6610e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.2865e-01',
+[92mINFO [0m:      	        'loss': '1.6321e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.5841e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.0558e+00'},
+[92mINFO [0m:      	  33: { 'accuracy': '7.1140e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.4213e-01',
+[92mINFO [0m:      	        'loss': '9.7274e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '3.9283e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.2455e+00'},
+[92mINFO [0m:      	  34: { 'accuracy': '7.0440e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.2045e-01',
+[92mINFO [0m:      	        'loss': '1.0454e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '3.7233e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.1919e+00'},
+[92mINFO [0m:      	  35: { 'accuracy': '6.7880e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.0160e-01',
+[92mINFO [0m:      	        'loss': '1.2522e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '3.4330e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.3163e+00'},
+[92mINFO [0m:      	  36: { 'accuracy': '6.9710e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.6767e-01',
+[92mINFO [0m:      	        'loss': '1.0301e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '3.0999e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.0289e+00'},
+[92mINFO [0m:      	  37: { 'accuracy': '6.9710e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.3996e-01',
+[92mINFO [0m:      	        'loss': '1.0431e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.7122e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.3977e+00'},
+[92mINFO [0m:      	  38: { 'accuracy': '6.9750e-01',
+[92mINFO [0m:      	        'attack_success_rate': '4.5994e-01',
+[92mINFO [0m:      	        'loss': '1.1938e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '4.9701e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.4836e+00'},
+[92mINFO [0m:      	  39: { 'accuracy': '7.2040e-01',
+[92mINFO [0m:      	        'attack_success_rate': '4.8916e-01',
+[92mINFO [0m:      	        'loss': '1.3323e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.2946e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.9565e+00'},
+[92mINFO [0m:      	  40: { 'accuracy': '6.1030e-01',
+[92mINFO [0m:      	        'attack_success_rate': '8.1904e-01',
+[92mINFO [0m:      	        'loss': '1.4845e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '8.3348e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '5.7668e-01'}}
+[92mINFO [0m:      
+[92mINFO [0m:      

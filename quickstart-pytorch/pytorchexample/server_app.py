@@ -159,6 +159,10 @@ def main(grid: Grid, context: Context) -> None:
     poison_fraction = float(context.run_config["poison-fraction"])
     trigger_size = int(context.run_config["trigger-size"])
     scale_factor = float(context.run_config["scale-factor"])
+    defense_method = int(context.run_config["defense-method"])
+    foolsgold_robust = False
+    if "foolsgold-robust" in context.run_config:
+        foolsgold_robust = bool(int(context.run_config["foolsgold-robust"]))
     metrics_csv_path = None
     if "metrics-csv" in context.run_config:
         csv_value = str(context.run_config["metrics-csv"]).strip()
@@ -187,6 +191,8 @@ def main(grid: Grid, context: Context) -> None:
         min_train_nodes=2,
         min_evaluate_nodes=2,
         min_available_nodes=2,
+        defense_method=defense_method,
+        foolsgold_robust=foolsgold_robust,
     )
 
     # Train-time config sent to clients each round

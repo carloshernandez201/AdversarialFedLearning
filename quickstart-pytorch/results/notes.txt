@@ -1,0 +1,1 @@
+FedAvg randomly samples 0.6 of 10 nodes

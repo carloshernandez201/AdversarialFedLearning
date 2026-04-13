@@ -93,17 +93,18 @@ Use the same setup across attack modes for fair comparison. Only `attack-mode` c
 
 ```bash
 # 0) Benign (no attack)
-flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=0 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64"
+flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=0 defense-method=0 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64"
 
 # 1) Model Replacement (fixed malicious set)
-flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=1 num-malicious-nodes=2 active-malicious-nodes-per-round=1 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=2.5"
+flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=1 defense-method=4 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=1.3 metrics-csv='results/model-replacement-flanders.csv'"
 
 # 2) Rotating Malicious
-flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=2 num-malicious-nodes=2 active-malicious-nodes-per-round=1 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=2.5"
+flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=2 defense-method=4 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=1.3 metrics-csv='results/rotating-flanders.csv'"
 
 # 3) Constrain-and-Scale (fixed malicious set)
-flwr run . --stream --federation-config "num-supernodes=10 client-resources-num-cpus=2 client-resources-num-gpus=0.1" --run-config "attack-mode=3 num-malicious-nodes=2 active-malicious-nodes-per-round=1 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=2.5"
+flwr run . --stream --federation-config "num-supernodes=10" --run-config "attack-mode=3 defense-method=4 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=1.3 metrics-csv='results/rotating-flanders.csv'"
 ```
+
 
 ### Run-config parameter reference
 
@@ -124,6 +125,9 @@ Use these keys inside `--run-config "..."`:
 | `scale-factor` | float | Multiplier for the malicious model update (`w_global + scale * delta`). |
 | `num-malicious-nodes` | int | Total malicious client IDs considered by the server (`0..num-malicious-nodes-1`). |
 | `active-malicious-nodes-per-round` | int | Number of malicious clients active per round. If `<=0`, it defaults to all malicious nodes. |
+| `defense-method` | int (`0`,`1`,`2`,`3`,`4`) | Server aggregation/defense: `0` FedAvg, `1` Trimmed-Mean, `2` Coordinate-wise Median, `3` Foolsgold, `4` FLANDERS. |
+| `trimmed-mean-beta` | float in `[0,0.5)` | Tail cut fraction for Trimmed-Mean (`defense-method=1`). |
+| `flanders-z-threshold` | float | Robust z-score threshold for filtering suspicious updates in FLANDERS (`defense-method=4`). |
 | `metrics-csv` | string (path) | Optional CSV file path to store per-round metrics (`train_agg`, `eval_agg`, `server_eval`) and final server metrics for plotting. |
 
 ### Server-side evaluation metrics
@@ -134,6 +138,16 @@ Use these keys inside `--run-config "..."`:
 - `poisoned_accuracy`, `poisoned_loss`: performance on the poisoned subset of each test batch.
 - `attack_success_rate`: fraction of poisoned **non-target-label** samples classified as the attacker target label.
 - `poisoned_examples`: number of samples used for poisoned evaluation.
+
+### Defense method options
+
+Use `defense-method` in `--run-config`:
+
+- `0`: FedAvg (default)
+- `1`: Trimmed-Mean (set `trimmed-mean-beta`, default `0.2`)
+- `2`: Coordinate-wise Median (unweighted median)
+- `3`: Foolsgold (similarity-based anomaly downweighting)
+- `4`: FLANDERS (anomaly filtering + FedAvg over retained updates)
 
 #### Common command-line flags
 

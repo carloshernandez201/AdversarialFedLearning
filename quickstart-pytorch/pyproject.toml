@@ -13,6 +13,9 @@ dependencies = [
     "flwr-datasets[vision]>=0.5.0",
     "torch==2.9.0",
     "torchvision==0.24.0",
+    "ipykernel>=7.2.0",
+    "matplotlib>=3.10.8",
+    "pandas>=3.0.2",
 ]
 
 [tool.hatch.build]
@@ -51,8 +54,12 @@ target-label = 0
 poison-fraction = 0.12
 trigger-size = 3
 scale-factor = 2.5
-num-malicious-nodes = 2
-active-malicious-nodes-per-round = 1
+num-malicious-nodes = 4
+active-malicious-nodes-per-round = 2
+defense-method = 0
+foolsgold-robust = 0
+trimmed-mean-beta = 0.2
+flanders-z-threshold = 3.5
 metrics-csv = ""
 
 

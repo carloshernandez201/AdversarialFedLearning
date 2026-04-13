@@ -1,0 +1,17 @@
+Overnight experiment report
+Started: 2026-04-13 00:44:08
+Finished: 2026-04-13 05:59:49
+Overall status: ok
+
+- 01_model_replacement_foolsgold: ok
+  attempt=1 rc=0 robust_foolsgold=0 rows=652 nonfinite=False huge_loss=False max_abs_loss=5.711796821843448
+- 02_rotating_foolsgold: ok
+  attempt=1 rc=0 robust_foolsgold=0 rows=652 nonfinite=False huge_loss=False max_abs_loss=6.138290622720954
+- 03_constrain_foolsgold: ok
+  attempt=1 rc=0 robust_foolsgold=0 rows=652 nonfinite=False huge_loss=False max_abs_loss=7.377838520796049
+- 04_model_replacement_flanders: ok
+  attempt=1 rc=0 robust_foolsgold=0 rows=532 nonfinite=False huge_loss=False max_abs_loss=5.2820707650188705
+- 05_rotating_flanders: ok
+  attempt=1 rc=0 robust_foolsgold=0 rows=532 nonfinite=False huge_loss=False max_abs_loss=5.071317597803756
+- 06_constrain_flanders: ok
+  attempt=1 rc=0 robust_foolsgold=0 rows=532 nonfinite=False huge_loss=False max_abs_loss=5.351004152395703
