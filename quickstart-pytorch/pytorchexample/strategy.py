@@ -39,9 +39,6 @@ class FedAvg(FlowerFedAvg):
     FOOLSGOLD_MAX_CLIENT_WEIGHT = 0.35
     FOOLSGOLD_UNIFORM_MIX = 0.2
 
-    # defense-method mapping:
-    # 0=fedavg, 1=trimmed-mean, 2=coordinate-wise median, 3=foolsgold, 4=flanders
-    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
         fraction_train: float = 1.0,
@@ -449,8 +446,6 @@ class FedAvg(FlowerFedAvg):
                 "foolsgold_update_norm_max": max_norm,
             }
 
-        # Foolsgold is strongest when similarity is measured on attack-informative
-        # coordinates (typically the tail/classifier tensors), not the full model.
         k_feat = min(len(array_keys), self.FOOLSGOLD_FEATURE_TENSORS)
         fg_keys = array_keys[-k_feat:]
         global_flat = self._flatten_single(fg_keys, global_np)
@@ -498,8 +493,6 @@ class FedAvg(FlowerFedAvg):
             local_flat = self._flatten_single(array_keys, local_arr)
             sampled_locals[node_id] = local_flat[sampled_idx]
 
-        # Round-1 bootstrap: FLANDERS cannot score anomalies without history,
-        # so use robust fallback aggregation before MAR predictions are available.
         if not self._flanders_round_history:
             self._flanders_seen_clients.update(node_ids)
             self._flanders_round_history.append(
@@ -537,7 +530,6 @@ class FedAvg(FlowerFedAvg):
             if node_id in prev_selected and node_id in predicted_by_client:
                 score = self._flanders_l2sq(local_vec, predicted_by_client[node_id])
             else:
-                # Cold-start fallback from the FLANDERS paper.
                 score = self._flanders_l2sq(local_vec, sampled_global)
             scores.append(score)
 
@@ -560,8 +552,6 @@ class FedAvg(FlowerFedAvg):
         kept_weights = [w for idx, w in enumerate(client_weights) if keep_mask[idx]]
         filtered = int(len(client_arrays) - len(kept_arrays))
 
-        # Sanitize history for MAR retraining by replacing filtered columns with
-        # either the last seen client vector or current global vector.
         sanitized_vectors: dict[int, np.ndarray] = {}
         for idx, node_id in enumerate(node_ids):
             if keep_mask[idx]:
@@ -720,7 +710,6 @@ class FedAvg(FlowerFedAvg):
 
         t_start = time.time()
 
-        # Initial server-side evaluation
         if evaluate_fn:
             res = evaluate_fn(0, initial_arrays)
             log(INFO, "Initial global evaluation results: %s", res)
@@ -736,7 +725,6 @@ class FedAvg(FlowerFedAvg):
 
         arrays = initial_arrays
 
-        # Expose global arrays so FoolsGold can compute deltas
         self._current_global_arrays = initial_arrays
         self._latest_global_arrays = arrays
 
@@ -744,7 +732,6 @@ class FedAvg(FlowerFedAvg):
             log(INFO, "")
             log(INFO, "[ROUND %s/%s]", current_round, num_rounds)
 
-            # Select active attackers for this round
             if active_malicious_nodes_per_round <= 0 or num_malicious_nodes <= 0:
                 active_attackers = []
             elif rotate_malicious_nodes:
@@ -757,10 +744,9 @@ class FedAvg(FlowerFedAvg):
 
             train_config["active-attackers"] = str(active_attackers)
 
-            # Store global arrays BEFORE aggregation so FoolsGold can compute deltas
             self._current_global_arrays = arrays
 
-            # ---------------- TRAIN ----------------
+            #tRAIN 
             train_replies = grid.send_and_receive(
                 messages=self.configure_train(
                     current_round,
@@ -792,7 +778,7 @@ class FedAvg(FlowerFedAvg):
                     metrics=agg_train_metrics,
                 )
 
-            # ---------------- EVALUATE (CLIENT SIDE) ----------------
+            #EVAL
             evaluate_replies = grid.send_and_receive(
                 messages=self.configure_evaluate(
                     current_round,
@@ -819,7 +805,7 @@ class FedAvg(FlowerFedAvg):
                     metrics=agg_evaluate_metrics,
                 )
 
-            # ---------------- EVALUATE (SERVER SIDE) ----------------
+            
             if evaluate_fn:
                 log(INFO, "Global evaluation")
                 res = evaluate_fn(current_round, arrays)
@@ -864,12 +850,13 @@ class FedAvg(FlowerFedAvg):
 
 
 
-
 '''
-# ---------------------------------------------------------------------------
-# FoolsGold (Fung et al., 2020 — https://arxiv.org/abs/1808.04866)
-# ---------------------------------------------------------------------------
-
+citations
+https://arxiv.org/html/2303.16668v3#S5
+#  https://arxiv.org/abs/1808.04866)
+# https://flower.ai/docs/datasets/ref-api/flwr_datasets.partitioner.DirichletPartitioner.html#flwr_datasets.partitioner.DirichletPartitioner
+'''
+'''
 class FoolsGold(FedAvg):
     """Down-weights clients whose cumulative gradient histories are
     suspiciously similar (i.e. colluding Sybils)."""

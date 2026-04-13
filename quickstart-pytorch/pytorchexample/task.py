@@ -26,7 +26,7 @@ class Net(nn.Module):
     def forward(self, x):
         return self.classifier(self.features(x))
 
-fds = None  # Cache FederatedDataset
+fds = None  
 central_test = None
 
 pytorch_transforms = Compose(

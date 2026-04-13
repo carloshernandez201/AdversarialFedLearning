@@ -24,23 +24,20 @@ app = ClientApp()
 def train_method(msg: Message, context: Context):
     """Train the model on local data."""
 
-    # Load the model and initialize it with the received weights
     model = Net()
     model.load_state_dict(msg.content["arrays"].to_torch_state_dict())
     device = get_device()
     model.to(device)
 
-    # snapshot the original global weights BEFORE local training as global_state
     global_state = {k: v.detach().clone() for k, v in model.state_dict().items()}
 
-    # Load the data
     partition_id = int(context.node_config["partition-id"])
     num_partitions = int(context.node_config["num-partitions"])
     batch_size = int(context.run_config["batch-size"])
     local_epochs = int(context.run_config["local-epochs"])
     trainloader, _ = load_data(partition_id, num_partitions, batch_size)
 
-    # Read per-round config from the message (not the static toml)
+    
     lr = float(msg.content["config"]["lr"])
     attack_mode = int(msg.content["config"]["attack-mode"])
     active_attackers = set()
@@ -112,7 +109,7 @@ def train_method(msg: Message, context: Context):
                 device,
             )
 
-        # Construct and return reply Message
+        
         model_record = ArrayRecord(model.state_dict())
         metrics = {
             "train_loss": train_loss,
@@ -127,26 +124,26 @@ def train_method(msg: Message, context: Context):
 def evaluate(msg: Message, context: Context):
     """Evaluate the model on local data."""
 
-    # Load the model and initialize it with the received weights
+    
     model = Net()
     model.load_state_dict(msg.content["arrays"].to_torch_state_dict())
     device = get_device()
     model.to(device)
 
-    # Load the data
+    
     partition_id = int(context.node_config["partition-id"])
     num_partitions = int(context.node_config["num-partitions"])
     batch_size = int(context.run_config["batch-size"])
     _, valloader = load_data(partition_id, num_partitions, batch_size)
 
-    # Call the evaluation function
+    
     eval_loss, eval_acc = test_fn(
         model,
         valloader,
         device,
     )
 
-    # Construct and return reply Message
+    
     metrics = {
         "eval_loss": eval_loss,
         "eval_acc": eval_acc,
