@@ -12,6 +12,9 @@ dependencies = [
     "flwr-datasets[vision]>=0.5.0",
     "torch==2.6.0",
     "torchvision==0.24.0",
+    "ipykernel>=7.2.0",
+    "matplotlib>=3.10.8",
+    "pandas>=3.0.2",
     "numpy",
 ]
 
@@ -26,23 +29,43 @@ serverapp = "pytorchexample.server_app:app"
 clientapp = "pytorchexample.client_app:app"
 
 [tool.flwr.app.config]
-# --- Training ---
-local-epochs = 1
+num-server-rounds = 40
+fraction-train = 0.6
+fraction-evaluate = 1.0
+local-epochs = 2
 learning-rate = 0.01
-batch-size = 32
-
-# --- Attack ---
-# 0 = no attack, 1 = model replacement, 2 = rotating malicious, 3 = constrain & scale
-attack-mode = 1
+batch-size = 64
+attack-mode = 0
 target-label = 0
-poison-fraction = 0.3
+poison-fraction = 0.12
 trigger-size = 3
-scale-factor = 10.0
-defense-strategy = 1
-num-server-rounds = 2
-fraction-train = 0.3
-fraction-evaluate = 0.3
-num-malicious-nodes = 1
-active-malicious-nodes-per-round = 1
-# --- Defense ---
-# 0 = plain FedAvg, 1 = FoolsGold
+scale-factor = 2.5
+num-malicious-nodes = 4
+active-malicious-nodes-per-round = 2
+defense-method = 0
+foolsgold-robust = 0
+trimmed-mean-beta = 0.2
+flanders-z-threshold = 3.5
+metrics-csv = ""
+
+
+#######################################################################
+# CONFIGURATION MIGRATION NOTICE:
+#
+# What was previously called "federation config" for SuperLink
+# connections in pyproject.toml has been renamed and moved.
+#
+# These settings are now **SuperLink connection configuration**
+# and are defined in the Flower configuration file.
+#
+# The entries below are commented out intentionally and are kept
+# only as a migration reference.
+#
+# Docs: https://flower.ai/docs/framework/ref-flower-configuration.html
+#######################################################################
+
+# [tool.flwr.federations]
+# default = "local-simulation"
+
+# [tool.flwr.federations.local-simulation]
+# options.num-supernodes = 100

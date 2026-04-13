@@ -144,6 +144,21 @@ def _poison_batch(images, labels, target_label=0, trigger_size=3, poison_fractio
 
     return poisoned_images, poisoned_labels
 
+def _poison_eval_batch(images, labels, target_label=0, trigger_size=3, poison_fraction=0.3):
+    """"
+    Add a white square trigger in the bottom-right corner of a subset of images and flip their labels to the attacker target label, for evaluation batches.
+    Since this is used for evaluation, return the clean not poisoned poisoned_images and poisoned_labels, so that we can evaluate clean and backdoor performance seperately.
+    """
+    poisoned_images = images.clone()
+    poisoned_labels = labels.clone()
+
+    batch_size = images.size(0)
+    num_poison = max(1, int(batch_size * poison_fraction))
+
+    poisoned_images[:num_poison, :, -trigger_size:, -trigger_size:] = 1.0
+    poisoned_labels[:num_poison] = target_label
+
+    return images, labels, poisoned_images, poisoned_labels  
 
 def _train_backdoor_local(
     model,

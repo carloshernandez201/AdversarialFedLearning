@@ -1,0 +1,944 @@
+
+================================================================================
+[2026-04-13 04:14:27] Attempt 1 | robust_foolsgold=0
+CMD: /Users/kausthubhkonuru/School/DistML/AdversarialFedLearning/quickstart-pytorch/.venv/bin/flwr run . --stream --federation-config num-supernodes=10 --run-config attack-mode=2 defense-method=4 num-malicious-nodes=4 active-malicious-nodes-per-round=2 num-server-rounds=40 fraction-train=0.6 fraction-evaluate=1.0 local-epochs=2 learning-rate=0.01 batch-size=64 target-label=0 poison-fraction=0.12 trigger-size=3 scale-factor=1.3 metrics-csv='results/rotating-flanders.csv'
+🎊 Successfully started run 12526166809154169052
+[92mINFO [0m:      Starting logstream for run_id `12526166809154169052`
+[92mINFO [0m:      Starting Flower Simulation
+/Users/kausthubhkonuru/School/DistML/AdversarialFedLearning/quickstart-pytorch/.venv/lib/python3.11/site-packages/ray/_private/worker.py:2051: FutureWarning: Tip: In future versions of Ray, Ray will no longer override accelerator visible devices env var if num_gpus=0 or num_gpus=None (default). To enable this behavior and turn off this error message, set RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO=0
+  warnings.warn(
+[92mINFO [0m:      Starting FedAvg strategy:
+[92mINFO [0m:      	├── Number of rounds: 40
+[92mINFO [0m:      	├── ArrayRecord (532.58 MB)
+[92mINFO [0m:      	├── ConfigRecord (train): {'lr': 0.01, 'attack-mode': 2, 'target-label': 0, 'poison-fraction': 0.12, 'trigger-size': 3, 'scale-factor': 1.3}
+[92mINFO [0m:      	├── ConfigRecord (evaluate): (empty!)
+[92mINFO [0m:      	├──> Sampling:
+[92mINFO [0m:      	│	├──Fraction: train (0.60) | evaluate ( 1.00)
+[92mINFO [0m:      	│	├──Minimum nodes: train (2) | evaluate (2)
+[92mINFO [0m:      	│	└──Minimum available nodes: 2
+[92mINFO [0m:      	└──> Keys in records:
+[92mINFO [0m:      		├── Weighted by: 'num-examples'
+[92mINFO [0m:      		├── ArrayRecord key: 'arrays'
+[92mINFO [0m:      		└── ConfigRecord key: 'config'
+[92mINFO [0m:      
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[92mINFO [0m:      Initial global evaluation results: {'accuracy': 0.0997, 'loss': 2.302421086951147, 'poisoned_accuracy': 0.0, 'poisoned_loss': 2.3022003442583485, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 1/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[36m(ClientAppActor pid=82429)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[36m(pid=gcs_server)[0m [2026-04-13 04:15:03,601 E 82400 2698893] (gcs_server) gcs_server.cc:302: Failed to establish connection to the event+metrics exporter agent. Events and metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[36m(ClientAppActor pid=82424)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.[32m [repeated 3x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[33m(raylet)[0m [2026-04-13 04:15:04,258 E 82404 2699177] (raylet) main.cc:975: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[36m(ClientAppActor pid=82425)[0m [2026-04-13 04:15:05,135 E 82425 2700530] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9247772516719104, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 0, 'flanders_kept': 6, 'flanders_mean_score': 0.0}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(ClientAppActor pid=82425)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[36m(ClientAppActor pid=82429)[0m [2026-04-13 04:15:05,243 E 82429 2700714] core_worker_process.cc:825: Failed to establish connection to the metrics exporter agent. Metrics will not be exported. Exporter agent status: RpcError: Running out of retries to initialize the metrics agent. rpc_code: 14[32m [repeated 7x across cluster][0m
+[36m(ClientAppActor pid=82427)[0m Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 2.3110536578517396, 'eval_acc': 0.10154922538730633}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1013, 'loss': 2.3106787174562866, 'poisoned_accuracy': 0.0, 'poisoned_loss': 2.2387854358663324, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 2/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[36m(raylet)[0m Spilled 2130 MiB, 4 objects, write throughput 2811 MiB/s. Set RAY_verbose_spill_logs=0 to disable this message.
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.9433090984698687, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 5.953030836280959e-06}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 4260 MiB, 6 objects, write throughput 1829 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 2.210086690610534, 'eval_acc': 0.14762618690654672}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1477, 'loss': 2.20390866074381, 'poisoned_accuracy': 0.5824081981212639, 'poisoned_loss': 1.8270140329453806, 'attack_success_rate': 0.5466540999057493, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 3/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.6376347401696467, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 9.885281154754532e-06}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 9053 MiB, 11 objects, write throughput 1440 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 2.003980989182954, 'eval_acc': 0.19040479760119938}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.1939, 'loss': 1.9942473158051697, 'poisoned_accuracy': 0.0, 'poisoned_loss': 2.8033998721079576, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 4/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.5876589867481654, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.013229168509402178}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 16509 MiB, 18 objects, write throughput 1181 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.913510856254915, 'eval_acc': 0.23268365817091455}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.2373, 'loss': 1.90524113329151, 'poisoned_accuracy': 0.0, 'poisoned_loss': 2.9924567116314686, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 5/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.500017522145605, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.00897206608055549}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.764620730682125, 'eval_acc': 0.3043478260869565}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3021, 'loss': 1.7508275946484337, 'poisoned_accuracy': 0.0, 'poisoned_loss': 2.986724188142511, 'attack_success_rate': 0.0, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 6/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.445030627470695, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.007995464900361007}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.653541258440471, 'eval_acc': 0.3263368315842079}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3302, 'loss': 1.6453331965434401, 'poisoned_accuracy': 0.2237403928266439, 'poisoned_loss': 2.600623324322558, 'attack_success_rate': 0.16588124410933083, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 7/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.3018082469668917, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.07500192303256173}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.6995753150597985, 'eval_acc': 0.35152423788105946}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3492, 'loss': 1.7027729538422596, 'poisoned_accuracy': 0.09479077711357814, 'poisoned_loss': 2.913275834742415, 'attack_success_rate': 0.057492931196983975, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 8/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.2415360480504214, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.032582315002455335}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 33019 MiB, 34 objects, write throughput 1230 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.554751597641694, 'eval_acc': 0.39650174912543723}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.3978, 'loss': 1.5578747384155853, 'poisoned_accuracy': 0.1520068317677199, 'poisoned_loss': 2.4856768361937784, 'attack_success_rate': 0.10179076343072573, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 9/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.2257214156220926, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.010272491289969292}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.3733071296874384, 'eval_acc': 0.45977011494252873}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.4595, 'loss': 1.3774784335607215, 'poisoned_accuracy': 0.032450896669513236, 'poisoned_loss': 3.0642132195115193, 'attack_success_rate': 0.027332704995287466, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 10/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.1563454582887607, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.05827485091428911}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.3531394205537475, 'eval_acc': 0.47176411794102946}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.4803, 'loss': 1.3511158831511871, 'poisoned_accuracy': 0.016225448334756618, 'poisoned_loss': 3.423296555405901, 'attack_success_rate': 0.006597549481621112, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 11/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.0805666607847635, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.09383260346824225}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2239274973938277, 'eval_acc': 0.545127436281859}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5442, 'loss': 1.2310486066190502, 'poisoned_accuracy': 0.10418445772843724, 'poisoned_loss': 3.5295941848005628, 'attack_success_rate': 0.061262959472196045, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 12/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.029562310024533, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.057036903629760945}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2468111132022144, 'eval_acc': 0.5622188905547226}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5597, 'loss': 1.2527649462977541, 'poisoned_accuracy': 0.1511528608027327, 'poisoned_loss': 2.908253243395042, 'attack_success_rate': 0.08671065032987747, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 13/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 1.0016565600150038, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.12950186072666797}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 66039 MiB, 65 objects, write throughput 955 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.131062419868461, 'eval_acc': 0.5963018490754622}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5887, 'loss': 1.1444459429270104, 'poisoned_accuracy': 0.04269854824935952, 'poisoned_loss': 3.1470042437594943, 'attack_success_rate': 0.019792648444863337, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 14/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.9553563743526993, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.002513987074586261}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.2514022699397571, 'eval_acc': 0.5522238880559721}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.5532, 'loss': 1.2613691076447693, 'poisoned_accuracy': 0.032450896669513236, 'poisoned_loss': 4.063154547973945, 'attack_success_rate': 0.008482563619227144, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 15/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.841368937807532, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.06973500062395335}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.0381792044472642, 'eval_acc': 0.6365817091454273}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6294, 'loss': 1.0526394180104703, 'poisoned_accuracy': 0.05123825789923143, 'poisoned_loss': 5.071317597803756, 'attack_success_rate': 0.01413760603204524, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 16/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.7816076641081886, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.16701963429027025}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.0362950277635679, 'eval_acc': 0.649375312343828}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6485, 'loss': 1.0438702491265308, 'poisoned_accuracy': 0.12382578992314261, 'poisoned_loss': 3.568939704349365, 'attack_success_rate': 0.05372290292177191, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 17/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.7695505472902519, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.25311357013596275}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9176396624792376, 'eval_acc': 0.6841579210394804}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6795, 'loss': 0.9343222749384144, 'poisoned_accuracy': 0.07771135781383433, 'poisoned_loss': 4.718310330486216, 'attack_success_rate': 0.019792648444863337, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 18/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.7355536534112967, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.07098787422237025}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9249258037778532, 'eval_acc': 0.6846576711644178}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6804, 'loss': 0.9451495642903485, 'poisoned_accuracy': 0.09393680614859094, 'poisoned_loss': 3.9004675484843787, 'attack_success_rate': 0.03110273327049953, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 19/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.7494809253754711, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.03188617166897128}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 1.079980509415885, 'eval_acc': 0.6616691654172915}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6466, 'loss': 1.098464305642285, 'poisoned_accuracy': 0.07429547395388557, 'poisoned_loss': 3.1818235327706796, 'attack_success_rate': 0.020735155513666354, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 20/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.6032441731229516, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.03482518727459271}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9098773357815619, 'eval_acc': 0.6965517241379311}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7, 'loss': 0.9168653156183943, 'poisoned_accuracy': 0.089666951323655, 'poisoned_loss': 3.9053264588601158, 'attack_success_rate': 0.02827521206409048, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 21/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.5660763757992475, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.2099408414600852}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8932725018064089, 'eval_acc': 0.7041479260369815}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.6996, 'loss': 0.9173275828361511, 'poisoned_accuracy': 0.11443210930828351, 'poisoned_loss': 4.014686376594459, 'attack_success_rate': 0.04995287464655985, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 22/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.6278664210794782, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.04213415499348882}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8719763621492483, 'eval_acc': 0.7143428285857072}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7102, 'loss': 0.8878600687920293, 'poisoned_accuracy': 0.22801024765157984, 'poisoned_loss': 3.1781957776601453, 'attack_success_rate': 0.16870876531573986, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 23/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.6128292761821157, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.06522155900216056}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8886434340934263, 'eval_acc': 0.7140429785107445}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7105, 'loss': 0.9168282536011708, 'poisoned_accuracy': 0.5439795046968403, 'poisoned_loss': 1.913466341418145, 'attack_success_rate': 0.5164938737040528, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 24/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.5534895591915339, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.26244684731298423}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8315082318298985, 'eval_acc': 0.7314342828585707}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.729, 'loss': 0.8451423622384856, 'poisoned_accuracy': 0.3783091374893254, 'poisoned_loss': 3.1991068015843758, 'attack_success_rate': 0.32704995287464655, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 25/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.4849780135617671, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.17211852873880326}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9279744931818303, 'eval_acc': 0.7188405797101449}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7165, 'loss': 0.9272042988221857, 'poisoned_accuracy': 0.5311699402220325, 'poisoned_loss': 2.242217729938631, 'attack_success_rate': 0.49010367577756836, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 26/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.482849835532114, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.017059135435732783}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8252324742023358, 'eval_acc': 0.735632183908046}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7395, 'loss': 0.8321219154551059, 'poisoned_accuracy': 0.3936806148590948, 'poisoned_loss': 3.086014583006972, 'attack_success_rate': 0.34307257304429783, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 27/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.43851334998958724, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.0627070997591275}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8791248949534753, 'eval_acc': 0.7334332833583209}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7295, 'loss': 0.887226973907857, 'poisoned_accuracy': 0.5149444918872759, 'poisoned_loss': 2.6782066210735365, 'attack_success_rate': 0.4816211121583412, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 28/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.41038255803029833, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.20842260607050248}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[36m(raylet)[0m Spilled 132079 MiB, 128 objects, write throughput 837 MiB/s.
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8438214226271771, 'eval_acc': 0.7329335332333833}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7295, 'loss': 0.8569510948808887, 'poisoned_accuracy': 0.6498719043552519, 'poisoned_loss': 1.715918724807687, 'attack_success_rate': 0.6248821866163996, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 29/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.3525085751114906, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.14371237304256956}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9360963419660334, 'eval_acc': 0.7363318340829585}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7339, 'loss': 0.9494845489912396, 'poisoned_accuracy': 0.7096498719043552, 'poisoned_loss': 1.5680725059824352, 'attack_success_rate': 0.6842601319509897, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 30/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.40389919256484696, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.3560507271562759}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.7956807097173623, 'eval_acc': 0.7513243378310844}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7485, 'loss': 0.8157588364202765, 'poisoned_accuracy': 0.5798462852263023, 'poisoned_loss': 2.400530981060585, 'attack_success_rate': 0.5466540999057493, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 31/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.3501119217694397, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.019116117429536627}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8957947604660799, 'eval_acc': 0.7407296351824089}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7391, 'loss': 0.8959067901478538, 'poisoned_accuracy': 0.7754056362083689, 'poisoned_loss': 1.1341570344197633, 'attack_success_rate': 0.7568331762488218, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 32/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.2931969079780046, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.02006916606562995}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9384090954647314, 'eval_acc': 0.7291354322838581}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7352, 'loss': 0.9471643333193622, 'poisoned_accuracy': 0.7873612297181896, 'poisoned_loss': 1.1276791469821505, 'attack_success_rate': 0.7681432610744581, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 33/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.3111837405606117, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.1979759705668586}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.858388939461329, 'eval_acc': 0.7605197401299351}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7518, 'loss': 0.8740267429170729, 'poisoned_accuracy': 0.7480785653287788, 'poisoned_loss': 1.5405128211304737, 'attack_success_rate': 0.7257304429783223, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 34/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.26525645793841207, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.23402170030525862}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8639356012593145, 'eval_acc': 0.759320339830085}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7567, 'loss': 0.8863164299651037, 'poisoned_accuracy': 0.6968403074295474, 'poisoned_loss': 1.9853097930817805, 'attack_success_rate': 0.6701225259189444, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 35/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.26038030500338494, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.16282393611755194}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8339171968825445, 'eval_acc': 0.7579210394802599}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7594, 'loss': 0.831530288427691, 'poisoned_accuracy': 0.6336464560204953, 'poisoned_loss': 2.510488853456626, 'attack_success_rate': 0.6032045240339302, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 36/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.2539561776680227, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.07454207740096774}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9037492179832448, 'eval_acc': 0.7550224887556222}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7487, 'loss': 0.9245599644093574, 'poisoned_accuracy': 0.6131511528608027, 'poisoned_loss': 2.8095697210346096, 'attack_success_rate': 0.5834118755890669, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 37/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.25887659603579166, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.07869778898452405}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9057209861485905, 'eval_acc': 0.7604197901049474}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7589, 'loss': 0.9129160763342169, 'poisoned_accuracy': 0.64133219470538, 'poisoned_loss': 2.598139595160822, 'attack_success_rate': 0.6116870876531574, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 38/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.2549999337317204, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.041325218776528456}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8663303022960425, 'eval_acc': 0.7621189405297353}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7597, 'loss': 0.8756232593632951, 'poisoned_accuracy': 0.7608881298035867, 'poisoned_loss': 1.366644272951363, 'attack_success_rate': 0.7389255419415646, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 39/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.254530878875588, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.16676650857910746}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.8621120748242616, 'eval_acc': 0.7697151424287856}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7627, 'loss': 0.877375503129597, 'poisoned_accuracy': 0.753202391118702, 'poisoned_loss': 1.541202713825273, 'attack_success_rate': 0.7313854853911405, 'poisoned_examples': 1171}
+[92mINFO [0m:      
+[92mINFO [0m:      [ROUND 40/40]
+[92mINFO [0m:      configure_train: Sampled 6 nodes (out of 10)
+[92mINFO [0m:      aggregate_train: Received 6 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'train_loss': 0.2326348774212596, 'nonfinite_updates_filtered': 0, 'flanders_filtered': 2, 'flanders_kept': 4, 'flanders_mean_score': 0.13513735068866126}
+[92mINFO [0m:      configure_evaluate: Sampled 10 nodes (out of 10)
+[92mINFO [0m:      aggregate_evaluate: Received 10 results and 0 failures
+[92mINFO [0m:      	└──> Aggregated MetricRecord: {'eval_loss': 0.9789784328064537, 'eval_acc': 0.7559220389805096}
+[92mINFO [0m:      Global evaluation
+[92mINFO [0m:      	└──> MetricRecord: {'accuracy': 0.7495, 'loss': 0.9902026321314559, 'poisoned_accuracy': 0.7181895815542272, 'poisoned_loss': 2.0381742945461068, 'attack_success_rate': 0.6927426955702167, 'poisoned_examples': 1171}
+[92mINFO [0m:      Saved per-round metrics CSV to results/rotating-flanders.csv
+[92mINFO [0m:      
+[92mINFO [0m:      Strategy execution finished in 2972.76s
+[92mINFO [0m:      
+[92mINFO [0m:      Final results:
+[92mINFO [0m:      
+[92mINFO [0m:      	Global Arrays:
+[92mINFO [0m:      		ArrayRecord (1065.154 MB)
+[92mINFO [0m:      	
+[92mINFO [0m:      	Aggregated ClientApp-side Train Metrics:
+[92mINFO [0m:      	{ 1: { 'flanders_filtered': '0',
+[92mINFO [0m:      	       'flanders_kept': '6',
+[92mINFO [0m:      	       'flanders_mean_score': '0.0000e+00',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.9248e+00'},
+[92mINFO [0m:      	  2: { 'flanders_filtered': '2',
+[92mINFO [0m:      	       'flanders_kept': '4',
+[92mINFO [0m:      	       'flanders_mean_score': '5.9530e-06',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.9433e+00'},
+[92mINFO [0m:      	  3: { 'flanders_filtered': '2',
+[92mINFO [0m:      	       'flanders_kept': '4',
+[92mINFO [0m:      	       'flanders_mean_score': '9.8853e-06',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.6376e+00'},
+[92mINFO [0m:      	  4: { 'flanders_filtered': '2',
+[92mINFO [0m:      	       'flanders_kept': '4',
+[92mINFO [0m:      	       'flanders_mean_score': '1.3229e-02',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.5877e+00'},
+[92mINFO [0m:      	  5: { 'flanders_filtered': '2',
+[92mINFO [0m:      	       'flanders_kept': '4',
+[92mINFO [0m:      	       'flanders_mean_score': '8.9721e-03',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.5000e+00'},
+[92mINFO [0m:      	  6: { 'flanders_filtered': '2',
+[92mINFO [0m:      	       'flanders_kept': '4',
+[92mINFO [0m:      	       'flanders_mean_score': '7.9955e-03',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.4450e+00'},
+[92mINFO [0m:      	  7: { 'flanders_filtered': '2',
+[92mINFO [0m:      	       'flanders_kept': '4',
+[92mINFO [0m:      	       'flanders_mean_score': '7.5002e-02',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.3018e+00'},
+[92mINFO [0m:      	  8: { 'flanders_filtered': '2',
+[92mINFO [0m:      	       'flanders_kept': '4',
+[92mINFO [0m:      	       'flanders_mean_score': '3.2582e-02',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.2415e+00'},
+[92mINFO [0m:      	  9: { 'flanders_filtered': '2',
+[92mINFO [0m:      	       'flanders_kept': '4',
+[92mINFO [0m:      	       'flanders_mean_score': '1.0272e-02',
+[92mINFO [0m:      	       'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	       'train_loss': '1.2257e+00'},
+[92mINFO [0m:      	  10: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '5.8275e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '1.1563e+00'},
+[92mINFO [0m:      	  11: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '9.3833e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '1.0806e+00'},
+[92mINFO [0m:      	  12: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '5.7037e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '1.0296e+00'},
+[92mINFO [0m:      	  13: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.2950e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '1.0017e+00'},
+[92mINFO [0m:      	  14: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '2.5140e-03',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '9.5536e-01'},
+[92mINFO [0m:      	  15: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '6.9735e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '8.4137e-01'},
+[92mINFO [0m:      	  16: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.6702e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.8161e-01'},
+[92mINFO [0m:      	  17: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '2.5311e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.6955e-01'},
+[92mINFO [0m:      	  18: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '7.0988e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.3555e-01'},
+[92mINFO [0m:      	  19: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '3.1886e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '7.4948e-01'},
+[92mINFO [0m:      	  20: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '3.4825e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '6.0324e-01'},
+[92mINFO [0m:      	  21: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '2.0994e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.6608e-01'},
+[92mINFO [0m:      	  22: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '4.2134e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '6.2787e-01'},
+[92mINFO [0m:      	  23: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '6.5222e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '6.1283e-01'},
+[92mINFO [0m:      	  24: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '2.6245e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '5.5349e-01'},
+[92mINFO [0m:      	  25: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.7212e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.8498e-01'},
+[92mINFO [0m:      	  26: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.7059e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.8285e-01'},
+[92mINFO [0m:      	  27: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '6.2707e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.3851e-01'},
+[92mINFO [0m:      	  28: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '2.0842e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.1038e-01'},
+[92mINFO [0m:      	  29: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.4371e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '3.5251e-01'},
+[92mINFO [0m:      	  30: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '3.5605e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '4.0390e-01'},
+[92mINFO [0m:      	  31: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.9116e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '3.5011e-01'},
+[92mINFO [0m:      	  32: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '2.0069e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '2.9320e-01'},
+[92mINFO [0m:      	  33: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.9798e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '3.1118e-01'},
+[92mINFO [0m:      	  34: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '2.3402e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '2.6526e-01'},
+[92mINFO [0m:      	  35: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.6282e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '2.6038e-01'},
+[92mINFO [0m:      	  36: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '7.4542e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '2.5396e-01'},
+[92mINFO [0m:      	  37: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '7.8698e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '2.5888e-01'},
+[92mINFO [0m:      	  38: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '4.1325e-02',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '2.5500e-01'},
+[92mINFO [0m:      	  39: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.6677e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '2.5453e-01'},
+[92mINFO [0m:      	  40: { 'flanders_filtered': '2',
+[92mINFO [0m:      	        'flanders_kept': '4',
+[92mINFO [0m:      	        'flanders_mean_score': '1.3514e-01',
+[92mINFO [0m:      	        'nonfinite_updates_filtered': '0',
+[92mINFO [0m:      	        'train_loss': '2.3263e-01'}}
+[92mINFO [0m:      	
+[92mINFO [0m:      	Aggregated ClientApp-side Evaluate Metrics:
+[92mINFO [0m:      	{ 1: {'eval_acc': '1.0155e-01', 'eval_loss': '2.3111e+00'},
+[92mINFO [0m:      	  2: {'eval_acc': '1.4763e-01', 'eval_loss': '2.2101e+00'},
+[92mINFO [0m:      	  3: {'eval_acc': '1.9040e-01', 'eval_loss': '2.0040e+00'},
+[92mINFO [0m:      	  4: {'eval_acc': '2.3268e-01', 'eval_loss': '1.9135e+00'},
+[92mINFO [0m:      	  5: {'eval_acc': '3.0435e-01', 'eval_loss': '1.7646e+00'},
+[92mINFO [0m:      	  6: {'eval_acc': '3.2634e-01', 'eval_loss': '1.6535e+00'},
+[92mINFO [0m:      	  7: {'eval_acc': '3.5152e-01', 'eval_loss': '1.6996e+00'},
+[92mINFO [0m:      	  8: {'eval_acc': '3.9650e-01', 'eval_loss': '1.5548e+00'},
+[92mINFO [0m:      	  9: {'eval_acc': '4.5977e-01', 'eval_loss': '1.3733e+00'},
+[92mINFO [0m:      	  10: {'eval_acc': '4.7176e-01', 'eval_loss': '1.3531e+00'},
+[92mINFO [0m:      	  11: {'eval_acc': '5.4513e-01', 'eval_loss': '1.2239e+00'},
+[92mINFO [0m:      	  12: {'eval_acc': '5.6222e-01', 'eval_loss': '1.2468e+00'},
+[92mINFO [0m:      	  13: {'eval_acc': '5.9630e-01', 'eval_loss': '1.1311e+00'},
+[92mINFO [0m:      	  14: {'eval_acc': '5.5222e-01', 'eval_loss': '1.2514e+00'},
+[92mINFO [0m:      	  15: {'eval_acc': '6.3658e-01', 'eval_loss': '1.0382e+00'},
+[92mINFO [0m:      	  16: {'eval_acc': '6.4938e-01', 'eval_loss': '1.0363e+00'},
+[92mINFO [0m:      	  17: {'eval_acc': '6.8416e-01', 'eval_loss': '9.1764e-01'},
+[92mINFO [0m:      	  18: {'eval_acc': '6.8466e-01', 'eval_loss': '9.2493e-01'},
+[92mINFO [0m:      	  19: {'eval_acc': '6.6167e-01', 'eval_loss': '1.0800e+00'},
+[92mINFO [0m:      	  20: {'eval_acc': '6.9655e-01', 'eval_loss': '9.0988e-01'},
+[92mINFO [0m:      	  21: {'eval_acc': '7.0415e-01', 'eval_loss': '8.9327e-01'},
+[92mINFO [0m:      	  22: {'eval_acc': '7.1434e-01', 'eval_loss': '8.7198e-01'},
+[92mINFO [0m:      	  23: {'eval_acc': '7.1404e-01', 'eval_loss': '8.8864e-01'},
+[92mINFO [0m:      	  24: {'eval_acc': '7.3143e-01', 'eval_loss': '8.3151e-01'},
+[92mINFO [0m:      	  25: {'eval_acc': '7.1884e-01', 'eval_loss': '9.2797e-01'},
+[92mINFO [0m:      	  26: {'eval_acc': '7.3563e-01', 'eval_loss': '8.2523e-01'},
+[92mINFO [0m:      	  27: {'eval_acc': '7.3343e-01', 'eval_loss': '8.7912e-01'},
+[92mINFO [0m:      	  28: {'eval_acc': '7.3293e-01', 'eval_loss': '8.4382e-01'},
+[92mINFO [0m:      	  29: {'eval_acc': '7.3633e-01', 'eval_loss': '9.3610e-01'},
+[92mINFO [0m:      	  30: {'eval_acc': '7.5132e-01', 'eval_loss': '7.9568e-01'},
+[92mINFO [0m:      	  31: {'eval_acc': '7.4073e-01', 'eval_loss': '8.9579e-01'},
+[92mINFO [0m:      	  32: {'eval_acc': '7.2914e-01', 'eval_loss': '9.3841e-01'},
+[92mINFO [0m:      	  33: {'eval_acc': '7.6052e-01', 'eval_loss': '8.5839e-01'},
+[92mINFO [0m:      	  34: {'eval_acc': '7.5932e-01', 'eval_loss': '8.6394e-01'},
+[92mINFO [0m:      	  35: {'eval_acc': '7.5792e-01', 'eval_loss': '8.3392e-01'},
+[92mINFO [0m:      	  36: {'eval_acc': '7.5502e-01', 'eval_loss': '9.0375e-01'},
+[92mINFO [0m:      	  37: {'eval_acc': '7.6042e-01', 'eval_loss': '9.0572e-01'},
+[92mINFO [0m:      	  38: {'eval_acc': '7.6212e-01', 'eval_loss': '8.6633e-01'},
+[92mINFO [0m:      	  39: {'eval_acc': '7.6972e-01', 'eval_loss': '8.6211e-01'},
+[92mINFO [0m:      	  40: {'eval_acc': '7.5592e-01', 'eval_loss': '9.7898e-01'}}
+[92mINFO [0m:      	
+[92mINFO [0m:      	ServerApp-side Evaluate Metrics:
+[92mINFO [0m:      	{ 0: { 'accuracy': '9.9700e-02',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '2.3024e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.3022e+00'},
+[92mINFO [0m:      	  1: { 'accuracy': '1.0130e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '2.3107e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.2388e+00'},
+[92mINFO [0m:      	  2: { 'accuracy': '1.4770e-01',
+[92mINFO [0m:      	       'attack_success_rate': '5.4665e-01',
+[92mINFO [0m:      	       'loss': '2.2039e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '5.8241e-01',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '1.8270e+00'},
+[92mINFO [0m:      	  3: { 'accuracy': '1.9390e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.9942e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.8034e+00'},
+[92mINFO [0m:      	  4: { 'accuracy': '2.3730e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.9052e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.9925e+00'},
+[92mINFO [0m:      	  5: { 'accuracy': '3.0210e-01',
+[92mINFO [0m:      	       'attack_success_rate': '0.0000e+00',
+[92mINFO [0m:      	       'loss': '1.7508e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '0.0000e+00',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.9867e+00'},
+[92mINFO [0m:      	  6: { 'accuracy': '3.3020e-01',
+[92mINFO [0m:      	       'attack_success_rate': '1.6588e-01',
+[92mINFO [0m:      	       'loss': '1.6453e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '2.2374e-01',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.6006e+00'},
+[92mINFO [0m:      	  7: { 'accuracy': '3.4920e-01',
+[92mINFO [0m:      	       'attack_success_rate': '5.7493e-02',
+[92mINFO [0m:      	       'loss': '1.7028e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '9.4791e-02',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.9133e+00'},
+[92mINFO [0m:      	  8: { 'accuracy': '3.9780e-01',
+[92mINFO [0m:      	       'attack_success_rate': '1.0179e-01',
+[92mINFO [0m:      	       'loss': '1.5579e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '1.5201e-01',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '2.4857e+00'},
+[92mINFO [0m:      	  9: { 'accuracy': '4.5950e-01',
+[92mINFO [0m:      	       'attack_success_rate': '2.7333e-02',
+[92mINFO [0m:      	       'loss': '1.3775e+00',
+[92mINFO [0m:      	       'poisoned_accuracy': '3.2451e-02',
+[92mINFO [0m:      	       'poisoned_examples': '1171',
+[92mINFO [0m:      	       'poisoned_loss': '3.0642e+00'},
+[92mINFO [0m:      	  10: { 'accuracy': '4.8030e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.5975e-03',
+[92mINFO [0m:      	        'loss': '1.3511e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '1.6225e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.4233e+00'},
+[92mINFO [0m:      	  11: { 'accuracy': '5.4420e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.1263e-02',
+[92mINFO [0m:      	        'loss': '1.2310e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '1.0418e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.5296e+00'},
+[92mINFO [0m:      	  12: { 'accuracy': '5.5970e-01',
+[92mINFO [0m:      	        'attack_success_rate': '8.6711e-02',
+[92mINFO [0m:      	        'loss': '1.2528e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '1.5115e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.9083e+00'},
+[92mINFO [0m:      	  13: { 'accuracy': '5.8870e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.9793e-02',
+[92mINFO [0m:      	        'loss': '1.1444e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '4.2699e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.1470e+00'},
+[92mINFO [0m:      	  14: { 'accuracy': '5.5320e-01',
+[92mINFO [0m:      	        'attack_success_rate': '8.4826e-03',
+[92mINFO [0m:      	        'loss': '1.2614e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '3.2451e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.0632e+00'},
+[92mINFO [0m:      	  15: { 'accuracy': '6.2940e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.4138e-02',
+[92mINFO [0m:      	        'loss': '1.0526e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.1238e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '5.0713e+00'},
+[92mINFO [0m:      	  16: { 'accuracy': '6.4850e-01',
+[92mINFO [0m:      	        'attack_success_rate': '5.3723e-02',
+[92mINFO [0m:      	        'loss': '1.0439e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '1.2383e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.5689e+00'},
+[92mINFO [0m:      	  17: { 'accuracy': '6.7950e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.9793e-02',
+[92mINFO [0m:      	        'loss': '9.3432e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.7711e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.7183e+00'},
+[92mINFO [0m:      	  18: { 'accuracy': '6.8040e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.1103e-02',
+[92mINFO [0m:      	        'loss': '9.4515e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '9.3937e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.9005e+00'},
+[92mINFO [0m:      	  19: { 'accuracy': '6.4660e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.0735e-02',
+[92mINFO [0m:      	        'loss': '1.0985e+00',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.4295e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.1818e+00'},
+[92mINFO [0m:      	  20: { 'accuracy': '7.0000e-01',
+[92mINFO [0m:      	        'attack_success_rate': '2.8275e-02',
+[92mINFO [0m:      	        'loss': '9.1687e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '8.9667e-02',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.9053e+00'},
+[92mINFO [0m:      	  21: { 'accuracy': '6.9960e-01',
+[92mINFO [0m:      	        'attack_success_rate': '4.9953e-02',
+[92mINFO [0m:      	        'loss': '9.1733e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '1.1443e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '4.0147e+00'},
+[92mINFO [0m:      	  22: { 'accuracy': '7.1020e-01',
+[92mINFO [0m:      	        'attack_success_rate': '1.6871e-01',
+[92mINFO [0m:      	        'loss': '8.8786e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '2.2801e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.1782e+00'},
+[92mINFO [0m:      	  23: { 'accuracy': '7.1050e-01',
+[92mINFO [0m:      	        'attack_success_rate': '5.1649e-01',
+[92mINFO [0m:      	        'loss': '9.1683e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.4398e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.9135e+00'},
+[92mINFO [0m:      	  24: { 'accuracy': '7.2900e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.2705e-01',
+[92mINFO [0m:      	        'loss': '8.4514e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '3.7831e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.1991e+00'},
+[92mINFO [0m:      	  25: { 'accuracy': '7.1650e-01',
+[92mINFO [0m:      	        'attack_success_rate': '4.9010e-01',
+[92mINFO [0m:      	        'loss': '9.2720e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.3117e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.2422e+00'},
+[92mINFO [0m:      	  26: { 'accuracy': '7.3950e-01',
+[92mINFO [0m:      	        'attack_success_rate': '3.4307e-01',
+[92mINFO [0m:      	        'loss': '8.3212e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '3.9368e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '3.0860e+00'},
+[92mINFO [0m:      	  27: { 'accuracy': '7.2950e-01',
+[92mINFO [0m:      	        'attack_success_rate': '4.8162e-01',
+[92mINFO [0m:      	        'loss': '8.8723e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.1494e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.6782e+00'},
+[92mINFO [0m:      	  28: { 'accuracy': '7.2950e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.2488e-01',
+[92mINFO [0m:      	        'loss': '8.5695e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.4987e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.7159e+00'},
+[92mINFO [0m:      	  29: { 'accuracy': '7.3390e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.8426e-01',
+[92mINFO [0m:      	        'loss': '9.4948e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.0965e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.5681e+00'},
+[92mINFO [0m:      	  30: { 'accuracy': '7.4850e-01',
+[92mINFO [0m:      	        'attack_success_rate': '5.4665e-01',
+[92mINFO [0m:      	        'loss': '8.1576e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '5.7985e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.4005e+00'},
+[92mINFO [0m:      	  31: { 'accuracy': '7.3910e-01',
+[92mINFO [0m:      	        'attack_success_rate': '7.5683e-01',
+[92mINFO [0m:      	        'loss': '8.9591e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.7541e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.1342e+00'},
+[92mINFO [0m:      	  32: { 'accuracy': '7.3520e-01',
+[92mINFO [0m:      	        'attack_success_rate': '7.6814e-01',
+[92mINFO [0m:      	        'loss': '9.4716e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.8736e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.1277e+00'},
+[92mINFO [0m:      	  33: { 'accuracy': '7.5180e-01',
+[92mINFO [0m:      	        'attack_success_rate': '7.2573e-01',
+[92mINFO [0m:      	        'loss': '8.7403e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.4808e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.5405e+00'},
+[92mINFO [0m:      	  34: { 'accuracy': '7.5670e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.7012e-01',
+[92mINFO [0m:      	        'loss': '8.8632e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.9684e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.9853e+00'},
+[92mINFO [0m:      	  35: { 'accuracy': '7.5940e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.0320e-01',
+[92mINFO [0m:      	        'loss': '8.3153e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.3365e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.5105e+00'},
+[92mINFO [0m:      	  36: { 'accuracy': '7.4870e-01',
+[92mINFO [0m:      	        'attack_success_rate': '5.8341e-01',
+[92mINFO [0m:      	        'loss': '9.2456e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.1315e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.8096e+00'},
+[92mINFO [0m:      	  37: { 'accuracy': '7.5890e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.1169e-01',
+[92mINFO [0m:      	        'loss': '9.1292e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '6.4133e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.5981e+00'},
+[92mINFO [0m:      	  38: { 'accuracy': '7.5970e-01',
+[92mINFO [0m:      	        'attack_success_rate': '7.3893e-01',
+[92mINFO [0m:      	        'loss': '8.7562e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.6089e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.3666e+00'},
+[92mINFO [0m:      	  39: { 'accuracy': '7.6270e-01',
+[92mINFO [0m:      	        'attack_success_rate': '7.3139e-01',
+[92mINFO [0m:      	        'loss': '8.7738e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.5320e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '1.5412e+00'},
+[92mINFO [0m:      	  40: { 'accuracy': '7.4950e-01',
+[92mINFO [0m:      	        'attack_success_rate': '6.9274e-01',
+[92mINFO [0m:      	        'loss': '9.9020e-01',
+[92mINFO [0m:      	        'poisoned_accuracy': '7.1819e-01',
+[92mINFO [0m:      	        'poisoned_examples': '1171',
+[92mINFO [0m:      	        'poisoned_loss': '2.0382e+00'}}
+[92mINFO [0m:      
+[36m(ClientAppActor pid=82425)[0m [93mWARNING [0m:   Manually terminating ClientAppActor
+[36m(ClientAppActor pid=82429)[0m [93mWARNING [0m:   Manually terminating ClientAppActor[32m [repeated 7x across cluster][0m
+[92mINFO [0m:      

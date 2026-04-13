@@ -1,0 +1,139 @@
+{
+  "started_at": "2026-04-13 00:44:08",
+  "experiments": [
+    {
+      "name": "01_model_replacement_foolsgold",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "return_code": 0,
+          "elapsed_sec": 3143.54,
+          "robust_foolsgold": false,
+          "csv_path": "results/model-replacement-foolsgold.csv",
+          "metrics": {
+            "exists": true,
+            "row_count": 652,
+            "has_nonfinite": false,
+            "huge_loss": false,
+            "max_abs_loss": 5.711796821843448,
+            "final_server_eval": {}
+          }
+        }
+      ],
+      "final_csv": "results/model-replacement-foolsgold.csv"
+    },
+    {
+      "name": "02_rotating_foolsgold",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "return_code": 0,
+          "elapsed_sec": 3042.94,
+          "robust_foolsgold": false,
+          "csv_path": "results/rotating-foolsgold.csv",
+          "metrics": {
+            "exists": true,
+            "row_count": 652,
+            "has_nonfinite": false,
+            "huge_loss": false,
+            "max_abs_loss": 6.138290622720954,
+            "final_server_eval": {}
+          }
+        }
+      ],
+      "final_csv": "results/rotating-foolsgold.csv"
+    },
+    {
+      "name": "03_constrain_foolsgold",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "return_code": 0,
+          "elapsed_sec": 3480.11,
+          "robust_foolsgold": false,
+          "csv_path": "results/constrain-foolsgold.csv",
+          "metrics": {
+            "exists": true,
+            "row_count": 652,
+            "has_nonfinite": false,
+            "huge_loss": false,
+            "max_abs_loss": 7.377838520796049,
+            "final_server_eval": {}
+          }
+        }
+      ],
+      "final_csv": "results/constrain-foolsgold.csv"
+    },
+    {
+      "name": "04_model_replacement_flanders",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "return_code": 0,
+          "elapsed_sec": 2951.92,
+          "robust_foolsgold": false,
+          "csv_path": "results/model-replacement-flanders.csv",
+          "metrics": {
+            "exists": true,
+            "row_count": 532,
+            "has_nonfinite": false,
+            "huge_loss": false,
+            "max_abs_loss": 5.2820707650188705,
+            "final_server_eval": {}
+          }
+        }
+      ],
+      "final_csv": "results/model-replacement-flanders.csv"
+    },
+    {
+      "name": "05_rotating_flanders",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "return_code": 0,
+          "elapsed_sec": 2984.79,
+          "robust_foolsgold": false,
+          "csv_path": "results/rotating-flanders.csv",
+          "metrics": {
+            "exists": true,
+            "row_count": 532,
+            "has_nonfinite": false,
+            "huge_loss": false,
+            "max_abs_loss": 5.071317597803756,
+            "final_server_eval": {}
+          }
+        }
+      ],
+      "final_csv": "results/rotating-flanders.csv"
+    },
+    {
+      "name": "06_constrain_flanders",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "return_code": 0,
+          "elapsed_sec": 3338.05,
+          "robust_foolsgold": false,
+          "csv_path": "results/constrain-flanders.csv",
+          "metrics": {
+            "exists": true,
+            "row_count": 532,
+            "has_nonfinite": false,
+            "huge_loss": false,
+            "max_abs_loss": 5.351004152395703,
+            "final_server_eval": {}
+          }
+        }
+      ],
+      "final_csv": "results/constrain-flanders.csv"
+    }
+  ],
+  "finished_at": "2026-04-13 05:59:49",
+  "overall_status": "ok"
+}
