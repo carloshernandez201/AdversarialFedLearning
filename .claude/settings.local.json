@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(C:/Users/carlo/AppData/Local/Python/bin/python.exe:*)"
+    ]
+  }
+}
