@@ -3,7 +3,7 @@
 import torch
 from flwr.app import ArrayRecord, ConfigRecord, Context, MetricRecord
 from flwr.serverapp import Grid, ServerApp
-from pytorchexample.strategy import FedAvg, FoolsGold
+from pytorchexample.strategy import FedAvg
 from pytorchexample.task import Net, get_device, load_centralized_dataset, test
 
 import os
@@ -199,10 +199,8 @@ def main(grid: Grid, context: Context) -> None:
         foolsgold_robust=foolsgold_robust,
     )
 
-    if defense_strategy == 1:
-        strategy = FoolsGold(**strategy_kwargs)
-    else:
-        strategy = FedAvg(**strategy_kwargs)
+    
+    strategy = FedAvg(**strategy_kwargs)
 
     # Train-time config sent to clients each round
     init_config = ConfigRecord(

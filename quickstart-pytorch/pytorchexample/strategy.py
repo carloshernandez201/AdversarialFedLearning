@@ -738,6 +738,7 @@ class FedAvg(FlowerFedAvg):
 
         # Expose global arrays so FoolsGold can compute deltas
         self._current_global_arrays = initial_arrays
+        self._latest_global_arrays = arrays
 
         for current_round in range(1, num_rounds + 1):
             log(INFO, "")
@@ -778,6 +779,7 @@ class FedAvg(FlowerFedAvg):
             if agg_arrays is not None:
                 result.arrays = agg_arrays
                 arrays = agg_arrays
+                self._latest_global_arrays = arrays
 
             if agg_train_metrics is not None:
                 log(INFO, "\t└──> Aggregated MetricRecord: %s", agg_train_metrics)
@@ -858,6 +860,12 @@ class FedAvg(FlowerFedAvg):
         return result
 
 
+
+
+
+
+
+'''
 # ---------------------------------------------------------------------------
 # FoolsGold (Fung et al., 2020 — https://arxiv.org/abs/1808.04866)
 # ---------------------------------------------------------------------------
@@ -994,3 +1002,4 @@ class FoolsGold(FedAvg):
             pass
 
         return agg_arrays, metrics
+'''
